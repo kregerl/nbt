@@ -5,6 +5,7 @@ use std::{
 };
 
 use byteorder::ReadBytesExt;
+use flate2::bufread::GzDecoder;
 
 #[repr(u8)]
 #[derive(Debug, PartialEq)]
@@ -73,15 +74,26 @@ pub struct NBTReader {
     cursor: Cursor<Vec<u8>>,
 }
 
+const GZIP_SIGNATURE: [u8; 2] = [0x1f, 0x8b];
 impl NBTReader {
     pub fn new(filename: &str) -> io::Result<Self> {
-        let cursor = Cursor::new(fs::read(filename)?);
+        let bytes = fs::read(filename)?;
+        // Decompress the file if its gzipped
+        let cursor = if bytes[..2] == GZIP_SIGNATURE {
+            let mut decoder = GzDecoder::new(bytes.as_slice());
+            let mut decompressed_bytes = Vec::new();
+            decoder.read_to_end(&mut decompressed_bytes)?;
+            Cursor::new(decompressed_bytes)
+        } else {
+            Cursor::new(bytes)
+        };
+        
         Ok(Self { cursor })
     }
 
     fn has_bytes_left(&self) -> bool {
         let len = self.cursor.get_ref().len();
-        (self.cursor.position() as usize) < len - 1
+        (self.cursor.position() as usize) < len.saturating_sub(1) 
     }
 
     pub fn parse_nbt(&mut self) -> Option<NBTTag> {
@@ -100,7 +112,7 @@ impl NBTReader {
         &mut self,
         element_type: fn(&mut NBTReader) -> io::Result<T>,
     ) -> io::Result<Vec<T>> {
-        let length = self.cursor.read_u32::<byteorder::BigEndian>()?;
+        let length = self.cursor.read_i32::<byteorder::BigEndian>()?;
         let mut array = Vec::with_capacity(length as usize);
         for _ in 0..length {
             array.push(element_type(self)?);
@@ -179,7 +191,7 @@ impl NBTReader {
             }
             _ => NBTPayload::Empty,
         })
-    } 
+    }
 
     fn parse_nbt_tag(&mut self) -> io::Result<NBTTag> {
         // The first byte in a tag is the tag type (ID)
