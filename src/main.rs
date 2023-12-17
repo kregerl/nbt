@@ -1,18 +1,30 @@
+mod debug;
 mod deserializer;
 mod error;
-mod nbtreader;
-use crate::nbtreader::NBTReader;
+mod kind;
+use std::fs;
 
-fn main() {
-    let filename = "test.dat";
-    // let filename = "r.0.0.mca";
-    let mut stream = NBTReader::new(filename).unwrap();
-    println!("Tag: {:#?}", stream.parse_nbt());
+use serde::Deserialize;
+
+use crate::deserializer::from_slice;
+
+#[derive(Debug, Deserialize)]
+struct Server {
+    ip: String,
+    name: String,
 }
 
-// mod deserializer;
-// mod error;
+#[derive(Debug, Deserialize)]
+struct Servers {
+    servers: Vec<Server>,
+}
 
-// fn main() {
-//     println!("Hello world");
-// }
+fn main() {
+    // let filename = "r.0.0.mca";
+    debug::dump_nbt("level.dat").unwrap();
+
+    let filename = "servers.dat";
+    let bytes = fs::read(filename).unwrap();
+    let x: Servers = from_slice(&bytes).unwrap();
+    println!("Here: {:#?}", x)
+}

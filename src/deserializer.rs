@@ -1,102 +1,37 @@
-use std::{
-    collections::HashMap,
-    fs,
-    io::{self, Cursor, Read},
-    thread::current, fmt::Display, f32::consts::PI,
-};
+use std::io::{self, Cursor, Read};
 
-use crate::error::{self, NBTError};
+use crate::{
+    error::{self, NBTError},
+    kind::NBTKind,
+};
 use byteorder::ReadBytesExt;
 use serde::{
-    de::{self, MapAccess},
-    forward_to_deserialize_any, Deserialize, Deserializer,
+    de::{self, MapAccess, SeqAccess},
+    forward_to_deserialize_any, Deserialize,
 };
 
+// Wrapper deserializeer that consumes the nameless root compound NBT tag
 pub struct NBTDeserializer<'de> {
     cursor: Cursor<&'de [u8]>,
-    size: u64,
-    // bytes: &'de [u8],
 }
 
-#[derive(Debug)]
-enum NBTTag {
-    End,
-    Byte(i8),
-    Short(i16),
-    Int(i32),
-    Long(i64),
-    Float(f32),
-    Double(f64),
-    ByteArray(Vec<i8>),
-    String(String),
-    List(Vec<NBTTag>),
-    Compound(HashMap<String, NBTTag>),
-    IntArray(Vec<i32>),
-    LongArray(Vec<i64>),
-}
-
-#[repr(u8)]
-#[derive(Debug, PartialEq, Copy, Clone)]
-pub enum NBTKind {
-    End,
-    Byte,
-    Short,
-    Int,
-    Long,
-    Float,
-    Double,
-    ByteArray,
-    String,
-    List,
-    Compound,
-    IntArray,
-    LongArray,
-}
-
-impl Display for NBTKind {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.write_fmt(format_args!("{:#?}", self))
-    }
-}
-
-impl From<u8> for NBTKind {
-    fn from(value: u8) -> Self {
-        match value {
-            0 => NBTKind::End,
-            1 => NBTKind::Byte,
-            2 => NBTKind::Short,
-            3 => NBTKind::Int,
-            4 => NBTKind::Long,
-            5 => NBTKind::Float,
-            6 => NBTKind::Double,
-            7 => NBTKind::ByteArray,
-            8 => NBTKind::String,
-            9 => NBTKind::List,
-            10 => NBTKind::Compound,
-            11 => NBTKind::IntArray,
-            12 => NBTKind::LongArray,
-            _ => unreachable!("Unknown ID value for NBTTag {}.", value),
+// Macro for generating parsing function implementations of number types
+macro_rules! parse_number_types {
+    ($($typ:ident),+) => {
+        paste::item! {
+            $(fn [<parse_ $typ>](&mut self) -> io::Result<$typ> {
+                self.cursor.[<read_ $typ>]::<byteorder::BigEndian>()
+            })*
         }
-    }
+    };
 }
 
 impl<'de> NBTDeserializer<'de> {
+    parse_number_types!(i16, i32, i64, f32, f64);
+
     fn has_bytes_left(&self) -> bool {
         let len = self.cursor.get_ref().len();
         (self.cursor.position() as usize) < len.saturating_sub(1)
-    }
-
-    // Reads the elements of an array of type T
-    fn parse_array<T>(
-        &mut self,
-        element_type: fn(&mut NBTDeserializer) -> io::Result<T>,
-    ) -> io::Result<Vec<T>> {
-        let length = self.cursor.read_i32::<byteorder::BigEndian>()?;
-        let mut array = Vec::with_capacity(length as usize);
-        for _ in 0..length {
-            array.push(element_type(self)?);
-        }
-        Ok(array)
     }
 
     fn parse_kind(&mut self) -> io::Result<NBTKind> {
@@ -114,79 +49,9 @@ impl<'de> NBTDeserializer<'de> {
         Ok(String::from_utf8(buffer).unwrap())
     }
 
-    fn parse_nbt_tag(&mut self, kind: NBTKind) -> io::Result<NBTTag> {
-        let tag = match kind {
-            // A single signed byte
-            NBTKind::Byte => NBTTag::Byte(self.cursor.read_i8()?),
-            // A single signed, big endian 16 bit integer
-            NBTKind::Short => NBTTag::Short(self.cursor.read_i16::<byteorder::BigEndian>()?),
-            // A single signed, big endian 32 bit integer
-            NBTKind::Int => NBTTag::Int(self.cursor.read_i32::<byteorder::BigEndian>()?),
-            // A single signed, big endian 64 bit integer
-            NBTKind::Long => NBTTag::Long(self.cursor.read_i64::<byteorder::BigEndian>()?),
-            // A single, big endian IEEE-754 single-precision floating point number (NaN possible)
-            NBTKind::Float => NBTTag::Float(self.cursor.read_f32::<byteorder::BigEndian>()?),
-            // A single, big endian IEEE-754 double-precision floating point number (NaN possible)
-            NBTKind::Double => NBTTag::Double(self.cursor.read_f64::<byteorder::BigEndian>()?),
-            // A length-prefixed array of signed bytes. The prefix is a signed integer (thus 4 bytes)
-            NBTKind::ByteArray => {
-                let bytes = self.parse_array(|reader| reader.cursor.read_i8())?;
-                NBTTag::ByteArray(bytes)
-            }
-            // A length-prefixed modified UTF-8 string. The prefix is an unsigned short (thus 2 bytes) signifying the length of the string in bytes
-            NBTKind::String => {
-                let s = self.parse_string()?;
-                NBTTag::String(s)
-            }
-            // A list of nameless tags, all of the same type.
-            // The list is prefixed with the Type ID of the items it contains (thus 1 byte),
-            // and the length of the list as a signed integer (a further 4 bytes).
-            // If the length of the list is 0 or negative, the type may be 0 (TAG_End) but otherwise it
-            // must be any other type. (The notchian implementation uses TAG_End in that situation,
-            // but another reference implementation by Mojang uses 1 instead; parsers should accept any type
-            // if the length is <= 0).
-            NBTKind::List => {
-                let list_nbt_type = NBTKind::from(self.cursor.read_u8()?);
-                let length = self.cursor.read_i32::<byteorder::BigEndian>()?;
-                let mut payload = Vec::with_capacity(length as usize);
-                for _ in 0..length {
-                    let tag_value = self.parse_nbt_tag(list_nbt_type)?;
-                    payload.push(tag_value)
-                }
-
-                NBTTag::List(payload)
-            }
-            // // Effectively a list of named tags. Order is not guaranteed.
-            // NBTKind::Compound => {
-            //     let mut map: HashMap<String, NBTTag> = HashMap::new();
-            //     loop {
-            //         let kind = self.parse_kind()?;
-            //         let tag = self.parse_nbt_tag(kind)?;
-            //         if let NBTTag::End = tag {
-            //             break;
-            //         }
-            //         let name = self.parse_string()?;
-            //         // TODO: Is it possible to have a nameless tag here?
-            //         map.insert(name, tag);
-            //     }
-            //     NBTTag::Compound(map)
-            // }
-            // A length-prefixed array of signed integers. The prefix is a signed integer (thus 4 bytes) and indicates the number of 4 byte integers.
-            NBTKind::IntArray => {
-                let ints =
-                    self.parse_array(|reader| reader.cursor.read_i32::<byteorder::BigEndian>())?;
-                NBTTag::IntArray(ints)
-            }
-            // A length-prefixed array of signed longs. The prefix is a signed integer (thus 4 bytes) and indicates the number of 8 byte longs.
-            NBTKind::LongArray => {
-                let longs =
-                    self.parse_array(|reader| reader.cursor.read_i64::<byteorder::BigEndian>())?;
-                NBTTag::LongArray(longs)
-            }
-            _ => NBTTag::End,
-        };
-
-        Ok(tag)
+    // Separated from the number type macro since a single byte does not have an endianess.
+    fn parse_i8(&mut self) -> io::Result<i8> {
+        self.cursor.read_i8()
     }
 }
 
@@ -194,7 +59,6 @@ impl<'de> NBTDeserializer<'de> {
     pub fn from_slice(bytes: &'de [u8]) -> Self {
         NBTDeserializer {
             cursor: Cursor::new(bytes),
-            size: bytes.len() as u64,
         }
     }
 }
@@ -205,20 +69,6 @@ where
 {
     let mut deserializer = NBTDeserializer::from_slice(s);
     T::deserialize(&mut deserializer)
-}
-
-#[derive(Debug, Deserialize)]
-struct Server {
-    ip: String,
-    name: String,
-}
-
-#[test]
-fn test() {
-    let filename = "test.dat";
-    let bytes = fs::read(filename).unwrap();
-    let x: Server = from_slice(&bytes).unwrap();
-    println!("Here: {:#?}", x)
 }
 
 impl<'de, 'a> serde::de::Deserializer<'de> for &'a mut NBTDeserializer<'de> {
@@ -233,6 +83,7 @@ impl<'de, 'a> serde::de::Deserializer<'de> for &'a mut NBTDeserializer<'de> {
     where
         V: de::Visitor<'de>,
     {
+        // File is not valid if there is no root compound NBT tag.
         Err(NBTError::ExpectedRootCompound)
     }
 
@@ -262,10 +113,12 @@ impl<'de, 'a> serde::de::Deserializer<'de> for &'a mut NBTDeserializer<'de> {
     where
         V: de::Visitor<'de>,
     {
+        // EOF if theres no bytes remaining.
         if !self.has_bytes_left() {
             return Err(NBTError::Eof);
         }
 
+        // Error if there is no root compound NBT tag
         let kind = self.parse_kind()?;
         if let NBTKind::Compound = kind {
             let _ = self.parse_string()?;
@@ -288,6 +141,8 @@ impl<'de, 'a> serde::de::Deserializer<'de> for &'a mut NBTDeserializer<'de> {
     }
 }
 
+/// Deserializer for compound NBT tags.
+/// Holds the outer NBT deserializer since thats where all the parsing functions are.
 struct NBTMapDeserializer<'de, 'a> {
     outer: &'a mut NBTDeserializer<'de>,
     kind: Option<NBTKind>,
@@ -312,8 +167,10 @@ impl<'de, 'a> MapAccess<'de> for NBTMapDeserializer<'de, 'a> {
             return Ok(None);
         }
 
+        // Save the kind so 'next_value_seed' can get it.
         self.kind = Some(kind);
 
+        // Treat the key of the compound NBT tag as a string
         let mut de_impl = NBTDeserializerImpl::new(self.outer, NBTKind::String);
 
         Ok(Some(seed.deserialize(&mut de_impl)?))
@@ -333,23 +190,59 @@ impl<'de, 'a> MapAccess<'de> for NBTMapDeserializer<'de, 'a> {
     }
 }
 
+/// Deserializes a compount NBT tag
 struct NBTSeqDeserializer<'de, 'a> {
     outer: &'a mut NBTDeserializer<'de>,
     kind: NBTKind,
     length: i32,
-    current_pos: i32
+    current_pos: i32,
 }
 
 impl<'de, 'a> NBTSeqDeserializer<'de, 'a> {
-    fn from_list(outer: &'a mut NBTDeserializer) -> io::Result<Self> {
-        // let kind = outer.parse_kind()?;
-        // let tag = outer.parse_nbt_tag(kind)?;
-        todo!();
-    
+    /// Creates a sequence deserializer for a NBT list where the type is defined as part of the list
+    fn from_list(outer: &'a mut NBTDeserializer<'de>) -> io::Result<Self> {
+        let kind = outer.parse_kind()?;
+        let length = outer.parse_i32()?;
+        Ok(Self {
+            outer,
+            kind,
+            length,
+            current_pos: 0,
+        })
+    }
 
+    /// Creates a sequence deserializer for a NBT array of type `kind`
+    fn from_array(outer: &'a mut NBTDeserializer<'de>, kind: NBTKind) -> io::Result<Self> {
+        let length = outer.parse_i32()?;
+        Ok(Self {
+            outer,
+            kind,
+            length,
+            current_pos: 0,
+        })
     }
 }
 
+impl<'de, 'a> SeqAccess<'de> for NBTSeqDeserializer<'de, 'a> {
+    type Error = NBTError;
+
+    fn next_element_seed<T>(&mut self, seed: T) -> Result<Option<T::Value>, Self::Error>
+    where
+        T: de::DeserializeSeed<'de>,
+    {
+        if self.current_pos == self.length {
+            return Ok(None);
+        }
+
+        // Deserialize the next element in the list/array
+        let mut de_impl = NBTDeserializerImpl::new(self.outer, self.kind);
+        let value = seed.deserialize(&mut de_impl)?;
+        self.current_pos += 1;
+        Ok(Some(value))
+    }
+}
+
+/// Actual implementation of deserializing NBT tags
 struct NBTDeserializerImpl<'de, 'a> {
     outer: &'a mut NBTDeserializer<'de>,
     kind: NBTKind,
@@ -373,21 +266,43 @@ impl<'de, 'a> serde::de::Deserializer<'de> for &'a mut NBTDeserializerImpl<'de, 
     where
         V: de::Visitor<'de>,
     {
-        let tag = self.outer.parse_nbt_tag(self.kind)?;
-
-        match tag {
-            NBTTag::Byte(value) => visitor.visit_i8(value),
-            NBTTag::Short(value) => visitor.visit_i16(value),
-            NBTTag::Int(value) => visitor.visit_i32(value),
-            NBTTag::Long(value) => visitor.visit_i64(value),
-            NBTTag::Float(value) => visitor.visit_f32(value),
-            NBTTag::Double(value) => visitor.visit_f64(value),
-            NBTTag::ByteArray(_) => todo!(),
-            NBTTag::String(value) => visitor.visit_string(value),
-            NBTTag::List(_) => todo!(),
-            NBTTag::Compound(_) => todo!(),
-            NBTTag::IntArray(_) => todo!(),
-            NBTTag::LongArray(_) => todo!(),
+        match self.kind {
+            // A single signed byte
+            NBTKind::Byte => visitor.visit_i8(self.outer.parse_i8()?),
+            // A single signed, big endian 16 bit integer
+            NBTKind::Short => visitor.visit_i16(self.outer.parse_i16()?),
+            // A single signed, big endian 32 bit integer
+            NBTKind::Int => visitor.visit_i32(self.outer.parse_i32()?),
+            // A single signed, big endian 64 bit integer
+            NBTKind::Long => visitor.visit_i64(self.outer.parse_i64()?),
+            // A single, big endian IEEE-754 single-precision floating point number (NaN possible)
+            NBTKind::Float => visitor.visit_f32(self.outer.parse_f32()?),
+            // A single, big endian IEEE-754 double-precision floating point number (NaN possible)
+            NBTKind::Double => visitor.visit_f64(self.outer.parse_f64()?),
+            // A length-prefixed array of signed bytes. The prefix is a signed integer (thus 4 bytes)
+            NBTKind::ByteArray => {
+                visitor.visit_seq(NBTSeqDeserializer::from_array(self.outer, NBTKind::Byte)?)
+            }
+            // A length-prefixed modified UTF-8 string. The prefix is an unsigned short (thus 2 bytes) signifying the length of the string in bytes
+            NBTKind::String => visitor.visit_string(self.outer.parse_string()?),
+            // A list of nameless tags, all of the same type.
+            // The list is prefixed with the Type ID of the items it contains (thus 1 byte),
+            // and the length of the list as a signed integer (a further 4 bytes).
+            // If the length of the list is 0 or negative, the type may be 0 (TAG_End) but otherwise it
+            // must be any other type. (The notchian implementation uses TAG_End in that situation,
+            // but another reference implementation by Mojang uses 1 instead; parsers should accept any type
+            // if the length is <= 0).
+            NBTKind::List => visitor.visit_seq(NBTSeqDeserializer::from_list(self.outer)?),
+            // Effectively a list of named tags. Order is not guaranteed.
+            NBTKind::Compound => visitor.visit_map(NBTMapDeserializer::new(self.outer)),
+            // A length-prefixed array of signed integers. The prefix is a signed integer (thus 4 bytes) and indicates the number of 4 byte integers.
+            NBTKind::IntArray => {
+                visitor.visit_seq(NBTSeqDeserializer::from_array(self.outer, NBTKind::Int)?)
+            }
+            // A length-prefixed array of signed longs. The prefix is a signed integer (thus 4 bytes) and indicates the number of 8 byte longs.
+            NBTKind::LongArray => {
+                visitor.visit_seq(NBTSeqDeserializer::from_array(self.outer, NBTKind::Long)?)
+            }
             _ => Err(NBTError::InvalidTagId),
         }
     }
@@ -396,16 +311,13 @@ impl<'de, 'a> serde::de::Deserializer<'de> for &'a mut NBTDeserializerImpl<'de, 
     where
         V: de::Visitor<'de>,
     {
-        let tag = self.outer.parse_nbt_tag(self.kind)?;
-        match tag {
-            NBTTag::Byte(value) => {
-                match value {
-                    0 => visitor.visit_bool(false),
-                    1 => visitor.visit_bool(true),
-                    _ => Err(NBTError::ExpectedBooleanByte(value))
-                }
+        match self.kind {
+            NBTKind::Byte => match self.outer.parse_i8()? {
+                0 => visitor.visit_bool(false),
+                1 => visitor.visit_bool(true),
+                value => Err(NBTError::ExpectedBooleanByte(value)),
             },
-            _ => Err(NBTError::MismatchedTag(self.kind, NBTKind::Byte))
+            _ => Err(NBTError::MismatchedTag(self.kind, NBTKind::Byte)),
         }
     }
 

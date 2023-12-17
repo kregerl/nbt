@@ -7,47 +7,10 @@ use std::{
 use byteorder::ReadBytesExt;
 use flate2::bufread::GzDecoder;
 
-#[repr(u8)]
-#[derive(Debug, PartialEq)]
-pub enum NBTKind {
-    End,
-    Byte,
-    Short,
-    Int,
-    Long,
-    Float,
-    Double,
-    ByteArray,
-    String,
-    List,
-    Compound,
-    IntArray,
-    LongArray,
-}
-
-impl From<u8> for NBTKind {
-    fn from(value: u8) -> Self {
-        match value {
-            0 => NBTKind::End,
-            1 => NBTKind::Byte,
-            2 => NBTKind::Short,
-            3 => NBTKind::Int,
-            4 => NBTKind::Long,
-            5 => NBTKind::Float,
-            6 => NBTKind::Double,
-            7 => NBTKind::ByteArray,
-            8 => NBTKind::String,
-            9 => NBTKind::List,
-            10 => NBTKind::Compound,
-            11 => NBTKind::IntArray,
-            12 => NBTKind::LongArray,
-            _ => unreachable!("Unknown ID value for NBTTag {}.", value),
-        }
-    }
-}
+use crate::{error::{self, NBTError}, kind::NBTKind};
 
 #[derive(Debug)]
-pub enum NBTPayload {
+enum NBTPayload {
     Empty,
     Byte(i8),
     Short(i16),
@@ -63,16 +26,15 @@ pub enum NBTPayload {
     LongArray(Vec<i64>),
 }
 
-
 #[derive(Debug)]
-pub struct NBTTag {
-    pub kind: NBTKind,
-    pub name: Option<String>,
-    pub payload: NBTPayload,
+struct NBTTag {
+    kind: NBTKind,
+    name: Option<String>,
+    payload: NBTPayload,
 }
 
 impl NBTTag {
-    pub fn new(kind: NBTKind, name: Option<String>, payload: NBTPayload) -> Self {
+    fn new(kind: NBTKind, name: Option<String>, payload: NBTPayload) -> Self {
         Self {
             kind,
             name,
@@ -81,13 +43,25 @@ impl NBTTag {
     }
 }
 
-pub struct NBTReader {
+pub fn dump_nbt(filename: &str) -> error::Result<()> {
+    let mut stream = NBTReader::new(filename).unwrap();
+    let tag = stream.parse_nbt();
+    match tag {
+        Some(tag) => {
+            println!("{:#?}", tag.payload);
+            Ok(())
+        }
+        None => Err(NBTError::ExpectedRootCompound),
+    }
+}
+
+struct NBTReader {
     cursor: Cursor<Vec<u8>>,
 }
 
 const GZIP_SIGNATURE: [u8; 2] = [0x1f, 0x8b];
 impl NBTReader {
-    pub fn new(filename: &str) -> io::Result<Self> {
+    fn new(filename: &str) -> io::Result<Self> {
         let bytes = fs::read(filename)?;
         // Decompress the file if its gzipped
         let cursor = if bytes[..2] == GZIP_SIGNATURE {
@@ -98,16 +72,16 @@ impl NBTReader {
         } else {
             Cursor::new(bytes)
         };
-        
+
         Ok(Self { cursor })
     }
 
     fn has_bytes_left(&self) -> bool {
         let len = self.cursor.get_ref().len();
-        (self.cursor.position() as usize) < len.saturating_sub(1) 
+        (self.cursor.position() as usize) < len.saturating_sub(1)
     }
 
-    pub fn parse_nbt(&mut self) -> Option<NBTTag> {
+    fn parse_nbt(&mut self) -> Option<NBTTag> {
         if !self.has_bytes_left() {
             None
         } else {
@@ -183,7 +157,6 @@ impl NBTReader {
                     if let NBTKind::End = tag.kind {
                         break;
                     }
-                    // TODO: Is it possible to have a nameless tag here?
                     map.insert(tag.name.unwrap(), tag.payload);
                 }
                 NBTPayload::Compound(map)
@@ -220,10 +193,6 @@ impl NBTReader {
 
         let payload = self.parse_nbt_payload(&kind)?;
 
-        Ok(NBTTag {
-            kind,
-            name: Some(name),
-            payload,
-        })
+        Ok(NBTTag::new(kind, Some(name), payload))
     }
 }

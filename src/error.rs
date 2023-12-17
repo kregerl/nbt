@@ -5,7 +5,7 @@ use std::{
 
 use serde::{de, ser};
 
-use crate::deserializer::NBTKind;
+use crate::kind::NBTKind;
 
 pub type Result<T> = std::result::Result<T, NBTError>;
 
