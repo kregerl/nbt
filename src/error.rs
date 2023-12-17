@@ -1,27 +1,24 @@
-use std::fmt::{Display, self};
+use std::{
+    fmt::{self, Display},
+    io,
+};
 
-use serde::{ser, de};
+use serde::{de, ser};
+
+use crate::deserializer::NBTKind;
 
 pub type Result<T> = std::result::Result<T, NBTError>;
 
-// This is a bare-bones implementation. A real library would provide additional
-// information in its error type, for example the line and column at which the
-// error occurred, the byte offset into the input, or the current key being
-// processed.
 #[derive(Debug)]
 pub enum NBTError {
-    // One or more variants that can be created by data structures through the
-    // `ser::Error` and `de::Error` traits. For example the Serialize impl for
-    // Mutex<T> might return an error because the mutex is poisoned, or the
-    // Deserialize impl for a struct may return an error because a required
-    // field is missing.
+    IoError(io::Error),
     Message(String),
-
-    // Zero or more variants that can be created directly by the Serializer and
-    // Deserializer without going through `ser::Error` and `de::Error`. These
-    // are specific to the format, in this case JSON.
     Eof,
-    Syntax,
+    ExpectedRootCompound,
+    InvalidTagId,
+    MismatchedTag(NBTKind, NBTKind),
+    ExpectedBooleanByte(i8),
+
     ExpectedBoolean,
     ExpectedInteger,
     ExpectedString,
@@ -53,9 +50,22 @@ impl Display for NBTError {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         match self {
             NBTError::Message(msg) => formatter.write_str(msg),
+            NBTError::MismatchedTag(received, expected) => formatter.write_fmt(format_args!(
+                "Expected {} tag but received {}",
+                expected, received
+            )),
+            NBTError::ExpectedBooleanByte(byte) => {
+                formatter.write_fmt(format_args!("Expected a boolean value but got {}", byte))
+            }
             NBTError::Eof => formatter.write_str("unexpected end of input"),
-            _ => todo!("Fill out errors: {}", self)
+            _ => todo!("Fill out errors: {}", self),
         }
+    }
+}
+
+impl From<io::Error> for NBTError {
+    fn from(value: io::Error) -> Self {
+        NBTError::IoError(value)
     }
 }
 

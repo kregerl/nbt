@@ -47,7 +47,7 @@ impl From<u8> for NBTKind {
 }
 
 #[derive(Debug)]
-enum NBTPayload {
+pub enum NBTPayload {
     Empty,
     Byte(i8),
     Short(i16),
@@ -63,11 +63,22 @@ enum NBTPayload {
     LongArray(Vec<i64>),
 }
 
+
 #[derive(Debug)]
 pub struct NBTTag {
-    kind: NBTKind,
-    name: Option<String>,
-    payload: NBTPayload,
+    pub kind: NBTKind,
+    pub name: Option<String>,
+    pub payload: NBTPayload,
+}
+
+impl NBTTag {
+    pub fn new(kind: NBTKind, name: Option<String>, payload: NBTPayload) -> Self {
+        Self {
+            kind,
+            name,
+            payload,
+        }
+    }
 }
 
 pub struct NBTReader {
