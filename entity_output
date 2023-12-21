@@ -1,0 +1,2709 @@
+Compound(
+    {
+        "DataVersion": Int(
+            3578,
+        ),
+        "Entities": List(
+            [
+                Compound(
+                    {
+                        "Air": Short(
+                            300,
+                        ),
+                        "FallDistance": Float(
+                            0.0,
+                        ),
+                        "Fire": Short(
+                            -1,
+                        ),
+                        "Invulnerable": Byte(
+                            0,
+                        ),
+                        "LootTable": String(
+                            "minecraft:chests/abandoned_mineshaft",
+                        ),
+                        "LootTableSeed": Long(
+                            -4488121060375559633,
+                        ),
+                        "Motion": List(
+                            [
+                                Double(
+                                    0.0,
+                                ),
+                                Double(
+                                    0.0,
+                                ),
+                                Double(
+                                    0.0,
+                                ),
+                            ],
+                        ),
+                        "OnGround": Byte(
+                            0,
+                        ),
+                        "PortalCooldown": Int(
+                            0,
+                        ),
+                        "Pos": List(
+                            [
+                                Double(
+                                    374.5,
+                                ),
+                                Double(
+                                    16.0625,
+                                ),
+                                Double(
+                                    9.5,
+                                ),
+                            ],
+                        ),
+                        "Rotation": List(
+                            [
+                                Float(
+                                    0.0,
+                                ),
+                                Float(
+                                    0.0,
+                                ),
+                            ],
+                        ),
+                        "UUID": IntArray(
+                            [
+                                1417680257,
+                                -379173508,
+                                -1335731049,
+                                552762049,
+                            ],
+                        ),
+                        "id": String(
+                            "minecraft:chest_minecart",
+                        ),
+                    },
+                ),
+            ],
+        ),
+        "Position": IntArray(
+            [
+                23,
+                0,
+            ],
+        ),
+    },
+)
+Compound(
+    {
+        "DataVersion": Int(
+            3578,
+        ),
+        "Entities": List(
+            [
+                Compound(
+                    {
+                        "Age": Short(
+                            338,
+                        ),
+                        "Air": Short(
+                            300,
+                        ),
+                        "FallDistance": Float(
+                            0.0,
+                        ),
+                        "Fire": Short(
+                            -1,
+                        ),
+                        "Health": Short(
+                            5,
+                        ),
+                        "Invulnerable": Byte(
+                            0,
+                        ),
+                        "Item": Compound(
+                            {
+                                "Count": Byte(
+                                    1,
+                                ),
+                                "id": String(
+                                    "minecraft:moss_carpet",
+                                ),
+                            },
+                        ),
+                        "Motion": List(
+                            [
+                                Double(
+                                    -9.820226778786517e-22,
+                                ),
+                                Double(
+                                    -0.08,
+                                ),
+                                Double(
+                                    -1.1554131970968444e-23,
+                                ),
+                            ],
+                        ),
+                        "OnGround": Byte(
+                            1,
+                        ),
+                        "PickupDelay": Short(
+                            0,
+                        ),
+                        "PortalCooldown": Int(
+                            0,
+                        ),
+                        "Pos": List(
+                            [
+                                Double(
+                                    391.54997842239914,
+                                ),
+                                Double(
+                                    8.0,
+                                ),
+                                Double(
+                                    14.629804220573535,
+                                ),
+                            ],
+                        ),
+                        "Rotation": List(
+                            [
+                                Float(
+                                    158.13469,
+                                ),
+                                Float(
+                                    0.0,
+                                ),
+                            ],
+                        ),
+                        "UUID": IntArray(
+                            [
+                                -645575631,
+                                -872003992,
+                                -1136768203,
+                                1830575875,
+                            ],
+                        ),
+                        "id": String(
+                            "minecraft:item",
+                        ),
+                    },
+                ),
+                Compound(
+                    {
+                        "Age": Short(
+                            298,
+                        ),
+                        "Air": Short(
+                            300,
+                        ),
+                        "FallDistance": Float(
+                            0.0,
+                        ),
+                        "Fire": Short(
+                            -1,
+                        ),
+                        "Health": Short(
+                            5,
+                        ),
+                        "Invulnerable": Byte(
+                            0,
+                        ),
+                        "Item": Compound(
+                            {
+                                "Count": Byte(
+                                    1,
+                                ),
+                                "id": String(
+                                    "minecraft:moss_carpet",
+                                ),
+                            },
+                        ),
+                        "Motion": List(
+                            [
+                                Double(
+                                    2.0667107192550153e-19,
+                                ),
+                                Double(
+                                    -0.08,
+                                ),
+                                Double(
+                                    -1.3121461222599155e-19,
+                                ),
+                            ],
+                        ),
+                        "OnGround": Byte(
+                            1,
+                        ),
+                        "PickupDelay": Short(
+                            0,
+                        ),
+                        "PortalCooldown": Int(
+                            0,
+                        ),
+                        "Pos": List(
+                            [
+                                Double(
+                                    397.4070682472104,
+                                ),
+                                Double(
+                                    4.0,
+                                ),
+                                Double(
+                                    14.577047003110533,
+                                ),
+                            ],
+                        ),
+                        "Rotation": List(
+                            [
+                                Float(
+                                    213.3623,
+                                ),
+                                Float(
+                                    0.0,
+                                ),
+                            ],
+                        ),
+                        "UUID": IntArray(
+                            [
+                                320965481,
+                                -1423358043,
+                                -1619964035,
+                                -1537411519,
+                            ],
+                        ),
+                        "id": String(
+                            "minecraft:item",
+                        ),
+                    },
+                ),
+            ],
+        ),
+        "Position": IntArray(
+            [
+                24,
+                0,
+            ],
+        ),
+    },
+)
+Compound(
+    {
+        "DataVersion": Int(
+            3578,
+        ),
+        "Entities": List(
+            [
+                Compound(
+                    {
+                        "Age": Short(
+                            0,
+                        ),
+                        "Air": Short(
+                            300,
+                        ),
+                        "FallDistance": Float(
+                            0.0,
+                        ),
+                        "Fire": Short(
+                            -1,
+                        ),
+                        "Health": Short(
+                            5,
+                        ),
+                        "Invulnerable": Byte(
+                            0,
+                        ),
+                        "Item": Compound(
+                            {
+                                "Count": Byte(
+                                    1,
+                                ),
+                                "id": String(
+                                    "minecraft:flowering_azalea",
+                                ),
+                            },
+                        ),
+                        "Motion": List(
+                            [
+                                Double(
+                                    0.0571902629548213,
+                                ),
+                                Double(
+                                    0.2,
+                                ),
+                                Double(
+                                    -0.013249936727048064,
+                                ),
+                            ],
+                        ),
+                        "OnGround": Byte(
+                            0,
+                        ),
+                        "PickupDelay": Short(
+                            10,
+                        ),
+                        "PortalCooldown": Int(
+                            0,
+                        ),
+                        "Pos": List(
+                            [
+                                Double(
+                                    415.5362926738281,
+                                ),
+                                Double(
+                                    1.4561525305560399,
+                                ),
+                                Double(
+                                    9.45568604382296,
+                                ),
+                            ],
+                        ),
+                        "Rotation": List(
+                            [
+                                Float(
+                                    157.70895,
+                                ),
+                                Float(
+                                    0.0,
+                                ),
+                            ],
+                        ),
+                        "UUID": IntArray(
+                            [
+                                133376687,
+                                1449345101,
+                                -1248743204,
+                                -2088050879,
+                            ],
+                        ),
+                        "id": String(
+                            "minecraft:item",
+                        ),
+                    },
+                ),
+                Compound(
+                    {
+                        "Age": Short(
+                            0,
+                        ),
+                        "Air": Short(
+                            300,
+                        ),
+                        "FallDistance": Float(
+                            0.0,
+                        ),
+                        "Fire": Short(
+                            -1,
+                        ),
+                        "Health": Short(
+                            5,
+                        ),
+                        "Invulnerable": Byte(
+                            0,
+                        ),
+                        "Item": Compound(
+                            {
+                                "Count": Byte(
+                                    1,
+                                ),
+                                "id": String(
+                                    "minecraft:moss_carpet",
+                                ),
+                            },
+                        ),
+                        "Motion": List(
+                            [
+                                Double(
+                                    0.039697907837255575,
+                                ),
+                                Double(
+                                    0.2,
+                                ),
+                                Double(
+                                    0.055623648442190005,
+                                ),
+                            ],
+                        ),
+                        "OnGround": Byte(
+                            0,
+                        ),
+                        "PickupDelay": Short(
+                            10,
+                        ),
+                        "PortalCooldown": Int(
+                            0,
+                        ),
+                        "Pos": List(
+                            [
+                                Double(
+                                    413.40028921643363,
+                                ),
+                                Double(
+                                    0.3658236381824896,
+                                ),
+                                Double(
+                                    8.2997670727877,
+                                ),
+                            ],
+                        ),
+                        "Rotation": List(
+                            [
+                                Float(
+                                    42.757908,
+                                ),
+                                Float(
+                                    0.0,
+                                ),
+                            ],
+                        ),
+                        "UUID": IntArray(
+                            [
+                                -1748196867,
+                                -1089450252,
+                                -2065770056,
+                                -937108223,
+                            ],
+                        ),
+                        "id": String(
+                            "minecraft:item",
+                        ),
+                    },
+                ),
+                Compound(
+                    {
+                        "Age": Short(
+                            0,
+                        ),
+                        "Air": Short(
+                            300,
+                        ),
+                        "FallDistance": Float(
+                            0.0,
+                        ),
+                        "Fire": Short(
+                            -1,
+                        ),
+                        "Health": Short(
+                            5,
+                        ),
+                        "Invulnerable": Byte(
+                            0,
+                        ),
+                        "Item": Compound(
+                            {
+                                "Count": Byte(
+                                    1,
+                                ),
+                                "id": String(
+                                    "minecraft:moss_carpet",
+                                ),
+                            },
+                        ),
+                        "Motion": List(
+                            [
+                                Double(
+                                    -0.02879099363458544,
+                                ),
+                                Double(
+                                    0.2,
+                                ),
+                                Double(
+                                    -0.058419854901169944,
+                                ),
+                            ],
+                        ),
+                        "OnGround": Byte(
+                            0,
+                        ),
+                        "PickupDelay": Short(
+                            10,
+                        ),
+                        "PortalCooldown": Int(
+                            0,
+                        ),
+                        "Pos": List(
+                            [
+                                Double(
+                                    414.53363190759035,
+                                ),
+                                Double(
+                                    0.1783845485664931,
+                                ),
+                                Double(
+                                    10.577039652844357,
+                                ),
+                            ],
+                        ),
+                        "Rotation": List(
+                            [
+                                Float(
+                                    7.3643374,
+                                ),
+                                Float(
+                                    0.0,
+                                ),
+                            ],
+                        ),
+                        "UUID": IntArray(
+                            [
+                                -202728128,
+                                708595366,
+                                -1915058790,
+                                1092450527,
+                            ],
+                        ),
+                        "id": String(
+                            "minecraft:item",
+                        ),
+                    },
+                ),
+                Compound(
+                    {
+                        "Age": Short(
+                            0,
+                        ),
+                        "Air": Short(
+                            300,
+                        ),
+                        "FallDistance": Float(
+                            0.0,
+                        ),
+                        "Fire": Short(
+                            -1,
+                        ),
+                        "Health": Short(
+                            5,
+                        ),
+                        "Invulnerable": Byte(
+                            0,
+                        ),
+                        "Item": Compound(
+                            {
+                                "Count": Byte(
+                                    1,
+                                ),
+                                "id": String(
+                                    "minecraft:azalea",
+                                ),
+                            },
+                        ),
+                        "Motion": List(
+                            [
+                                Double(
+                                    0.032794515719427514,
+                                ),
+                                Double(
+                                    0.2,
+                                ),
+                                Double(
+                                    -0.06371059752284347,
+                                ),
+                            ],
+                        ),
+                        "OnGround": Byte(
+                            0,
+                        ),
+                        "PickupDelay": Short(
+                            10,
+                        ),
+                        "PortalCooldown": Int(
+                            0,
+                        ),
+                        "Pos": List(
+                            [
+                                Double(
+                                    413.25926686784334,
+                                ),
+                                Double(
+                                    0.14682366097696514,
+                                ),
+                                Double(
+                                    9.400165250612098,
+                                ),
+                            ],
+                        ),
+                        "Rotation": List(
+                            [
+                                Float(
+                                    224.5018,
+                                ),
+                                Float(
+                                    0.0,
+                                ),
+                            ],
+                        ),
+                        "UUID": IntArray(
+                            [
+                                -1635989003,
+                                -599833660,
+                                -1384205024,
+                                -1671980473,
+                            ],
+                        ),
+                        "id": String(
+                            "minecraft:item",
+                        ),
+                    },
+                ),
+                Compound(
+                    {
+                        "Age": Short(
+                            0,
+                        ),
+                        "Air": Short(
+                            300,
+                        ),
+                        "FallDistance": Float(
+                            0.0,
+                        ),
+                        "Fire": Short(
+                            -1,
+                        ),
+                        "Health": Short(
+                            5,
+                        ),
+                        "Invulnerable": Byte(
+                            0,
+                        ),
+                        "Item": Compound(
+                            {
+                                "Count": Byte(
+                                    1,
+                                ),
+                                "id": String(
+                                    "minecraft:moss_carpet",
+                                ),
+                            },
+                        ),
+                        "Motion": List(
+                            [
+                                Double(
+                                    -0.09405326250094151,
+                                ),
+                                Double(
+                                    0.2,
+                                ),
+                                Double(
+                                    -0.0014955854453806428,
+                                ),
+                            ],
+                        ),
+                        "OnGround": Byte(
+                            0,
+                        ),
+                        "PickupDelay": Short(
+                            10,
+                        ),
+                        "PortalCooldown": Int(
+                            0,
+                        ),
+                        "Pos": List(
+                            [
+                                Double(
+                                    414.6064155209644,
+                                ),
+                                Double(
+                                    0.358919023167105,
+                                ),
+                                Double(
+                                    11.469667205753362,
+                                ),
+                            ],
+                        ),
+                        "Rotation": List(
+                            [
+                                Float(
+                                    251.76546,
+                                ),
+                                Float(
+                                    0.0,
+                                ),
+                            ],
+                        ),
+                        "UUID": IntArray(
+                            [
+                                -773111942,
+                                -1916121907,
+                                -2113317626,
+                                211725657,
+                            ],
+                        ),
+                        "id": String(
+                            "minecraft:item",
+                        ),
+                    },
+                ),
+                Compound(
+                    {
+                        "Age": Short(
+                            0,
+                        ),
+                        "Air": Short(
+                            300,
+                        ),
+                        "FallDistance": Float(
+                            0.0,
+                        ),
+                        "Fire": Short(
+                            -1,
+                        ),
+                        "Health": Short(
+                            5,
+                        ),
+                        "Invulnerable": Byte(
+                            0,
+                        ),
+                        "Item": Compound(
+                            {
+                                "Count": Byte(
+                                    1,
+                                ),
+                                "id": String(
+                                    "minecraft:moss_carpet",
+                                ),
+                            },
+                        ),
+                        "Motion": List(
+                            [
+                                Double(
+                                    -0.022183080726956114,
+                                ),
+                                Double(
+                                    0.2,
+                                ),
+                                Double(
+                                    -0.08815621994468957,
+                                ),
+                            ],
+                        ),
+                        "OnGround": Byte(
+                            0,
+                        ),
+                        "PickupDelay": Short(
+                            10,
+                        ),
+                        "PortalCooldown": Int(
+                            0,
+                        ),
+                        "Pos": List(
+                            [
+                                Double(
+                                    413.44298095450205,
+                                ),
+                                Double(
+                                    0.13363951922966766,
+                                ),
+                                Double(
+                                    10.441932982559258,
+                                ),
+                            ],
+                        ),
+                        "Rotation": List(
+                            [
+                                Float(
+                                    354.7438,
+                                ),
+                                Float(
+                                    0.0,
+                                ),
+                            ],
+                        ),
+                        "UUID": IntArray(
+                            [
+                                -755810306,
+                                26035144,
+                                -1376229471,
+                                -220556927,
+                            ],
+                        ),
+                        "id": String(
+                            "minecraft:item",
+                        ),
+                    },
+                ),
+                Compound(
+                    {
+                        "Age": Short(
+                            0,
+                        ),
+                        "Air": Short(
+                            300,
+                        ),
+                        "FallDistance": Float(
+                            0.0,
+                        ),
+                        "Fire": Short(
+                            -1,
+                        ),
+                        "Health": Short(
+                            5,
+                        ),
+                        "Invulnerable": Byte(
+                            0,
+                        ),
+                        "Item": Compound(
+                            {
+                                "Count": Byte(
+                                    1,
+                                ),
+                                "id": String(
+                                    "minecraft:moss_carpet",
+                                ),
+                            },
+                        ),
+                        "Motion": List(
+                            [
+                                Double(
+                                    0.07394780504029361,
+                                ),
+                                Double(
+                                    0.2,
+                                ),
+                                Double(
+                                    -0.040219678379073615,
+                                ),
+                            ],
+                        ),
+                        "OnGround": Byte(
+                            0,
+                        ),
+                        "PickupDelay": Short(
+                            10,
+                        ),
+                        "PortalCooldown": Int(
+                            0,
+                        ),
+                        "Pos": List(
+                            [
+                                Double(
+                                    412.6630296981695,
+                                ),
+                                Double(
+                                    0.4362321055615891,
+                                ),
+                                Double(
+                                    9.35516493633963,
+                                ),
+                            ],
+                        ),
+                        "Rotation": List(
+                            [
+                                Float(
+                                    320.40298,
+                                ),
+                                Float(
+                                    0.0,
+                                ),
+                            ],
+                        ),
+                        "UUID": IntArray(
+                            [
+                                23566388,
+                                -854702650,
+                                -1354114204,
+                                -1308797565,
+                            ],
+                        ),
+                        "id": String(
+                            "minecraft:item",
+                        ),
+                    },
+                ),
+                Compound(
+                    {
+                        "Age": Short(
+                            0,
+                        ),
+                        "Air": Short(
+                            300,
+                        ),
+                        "FallDistance": Float(
+                            0.0,
+                        ),
+                        "Fire": Short(
+                            -1,
+                        ),
+                        "Health": Short(
+                            5,
+                        ),
+                        "Invulnerable": Byte(
+                            0,
+                        ),
+                        "Item": Compound(
+                            {
+                                "Count": Byte(
+                                    1,
+                                ),
+                                "id": String(
+                                    "minecraft:azalea",
+                                ),
+                            },
+                        ),
+                        "Motion": List(
+                            [
+                                Double(
+                                    -0.0936181136587379,
+                                ),
+                                Double(
+                                    0.2,
+                                ),
+                                Double(
+                                    0.05186613987558336,
+                                ),
+                            ],
+                        ),
+                        "OnGround": Byte(
+                            0,
+                        ),
+                        "PickupDelay": Short(
+                            10,
+                        ),
+                        "PortalCooldown": Int(
+                            0,
+                        ),
+                        "Pos": List(
+                            [
+                                Double(
+                                    411.6142185178281,
+                                ),
+                                Double(
+                                    0.28834252763984486,
+                                ),
+                                Double(
+                                    8.491550587844308,
+                                ),
+                            ],
+                        ),
+                        "Rotation": List(
+                            [
+                                Float(
+                                    343.47226,
+                                ),
+                                Float(
+                                    0.0,
+                                ),
+                            ],
+                        ),
+                        "UUID": IntArray(
+                            [
+                                1260548953,
+                                -1946598525,
+                                -1707154677,
+                                -876329013,
+                            ],
+                        ),
+                        "id": String(
+                            "minecraft:item",
+                        ),
+                    },
+                ),
+                Compound(
+                    {
+                        "Age": Short(
+                            0,
+                        ),
+                        "Air": Short(
+                            300,
+                        ),
+                        "FallDistance": Float(
+                            0.0,
+                        ),
+                        "Fire": Short(
+                            -1,
+                        ),
+                        "Health": Short(
+                            5,
+                        ),
+                        "Invulnerable": Byte(
+                            0,
+                        ),
+                        "Item": Compound(
+                            {
+                                "Count": Byte(
+                                    1,
+                                ),
+                                "id": String(
+                                    "minecraft:moss_carpet",
+                                ),
+                            },
+                        ),
+                        "Motion": List(
+                            [
+                                Double(
+                                    -0.020388485481006496,
+                                ),
+                                Double(
+                                    0.2,
+                                ),
+                                Double(
+                                    0.006575873582935252,
+                                ),
+                            ],
+                        ),
+                        "OnGround": Byte(
+                            0,
+                        ),
+                        "PickupDelay": Short(
+                            10,
+                        ),
+                        "PortalCooldown": Int(
+                            0,
+                        ),
+                        "Pos": List(
+                            [
+                                Double(
+                                    412.2756792667378,
+                                ),
+                                Double(
+                                    0.2809842920142092,
+                                ),
+                                Double(
+                                    10.397602705212979,
+                                ),
+                            ],
+                        ),
+                        "Rotation": List(
+                            [
+                                Float(
+                                    196.6236,
+                                ),
+                                Float(
+                                    0.0,
+                                ),
+                            ],
+                        ),
+                        "UUID": IntArray(
+                            [
+                                794580577,
+                                755581170,
+                                -2030110031,
+                                -336243947,
+                            ],
+                        ),
+                        "id": String(
+                            "minecraft:item",
+                        ),
+                    },
+                ),
+                Compound(
+                    {
+                        "Age": Short(
+                            0,
+                        ),
+                        "Air": Short(
+                            300,
+                        ),
+                        "FallDistance": Float(
+                            0.0,
+                        ),
+                        "Fire": Short(
+                            -1,
+                        ),
+                        "Health": Short(
+                            5,
+                        ),
+                        "Invulnerable": Byte(
+                            0,
+                        ),
+                        "Item": Compound(
+                            {
+                                "Count": Byte(
+                                    1,
+                                ),
+                                "id": String(
+                                    "minecraft:azalea",
+                                ),
+                            },
+                        ),
+                        "Motion": List(
+                            [
+                                Double(
+                                    0.029394130519810935,
+                                ),
+                                Double(
+                                    0.2,
+                                ),
+                                Double(
+                                    -0.02924492093309139,
+                                ),
+                            ],
+                        ),
+                        "OnGround": Byte(
+                            0,
+                        ),
+                        "PickupDelay": Short(
+                            10,
+                        ),
+                        "PortalCooldown": Int(
+                            0,
+                        ),
+                        "Pos": List(
+                            [
+                                Double(
+                                    411.3699908229279,
+                                ),
+                                Double(
+                                    0.5410703666667351,
+                                ),
+                                Double(
+                                    9.466377623182947,
+                                ),
+                            ],
+                        ),
+                        "Rotation": List(
+                            [
+                                Float(
+                                    133.41824,
+                                ),
+                                Float(
+                                    0.0,
+                                ),
+                            ],
+                        ),
+                        "UUID": IntArray(
+                            [
+                                1731404689,
+                                1405240339,
+                                -1637540389,
+                                -771949540,
+                            ],
+                        ),
+                        "id": String(
+                            "minecraft:item",
+                        ),
+                    },
+                ),
+                Compound(
+                    {
+                        "Age": Short(
+                            0,
+                        ),
+                        "Air": Short(
+                            300,
+                        ),
+                        "FallDistance": Float(
+                            0.0,
+                        ),
+                        "Fire": Short(
+                            -1,
+                        ),
+                        "Health": Short(
+                            5,
+                        ),
+                        "Invulnerable": Byte(
+                            0,
+                        ),
+                        "Item": Compound(
+                            {
+                                "Count": Byte(
+                                    1,
+                                ),
+                                "id": String(
+                                    "minecraft:moss_carpet",
+                                ),
+                            },
+                        ),
+                        "Motion": List(
+                            [
+                                Double(
+                                    -0.01047679027972584,
+                                ),
+                                Double(
+                                    0.2,
+                                ),
+                                Double(
+                                    -0.0017123035333356518,
+                                ),
+                            ],
+                        ),
+                        "OnGround": Byte(
+                            0,
+                        ),
+                        "PickupDelay": Short(
+                            10,
+                        ),
+                        "PortalCooldown": Int(
+                            0,
+                        ),
+                        "Pos": List(
+                            [
+                                Double(
+                                    412.2709745610445,
+                                ),
+                                Double(
+                                    0.5935256294677576,
+                                ),
+                                Double(
+                                    12.320964915318111,
+                                ),
+                            ],
+                        ),
+                        "Rotation": List(
+                            [
+                                Float(
+                                    187.02437,
+                                ),
+                                Float(
+                                    0.0,
+                                ),
+                            ],
+                        ),
+                        "UUID": IntArray(
+                            [
+                                -1353641615,
+                                1491289625,
+                                -1284130060,
+                                -686086636,
+                            ],
+                        ),
+                        "id": String(
+                            "minecraft:item",
+                        ),
+                    },
+                ),
+                Compound(
+                    {
+                        "Age": Short(
+                            0,
+                        ),
+                        "Air": Short(
+                            300,
+                        ),
+                        "FallDistance": Float(
+                            0.0,
+                        ),
+                        "Fire": Short(
+                            -1,
+                        ),
+                        "Health": Short(
+                            5,
+                        ),
+                        "Invulnerable": Byte(
+                            0,
+                        ),
+                        "Item": Compound(
+                            {
+                                "Count": Byte(
+                                    1,
+                                ),
+                                "id": String(
+                                    "minecraft:moss_carpet",
+                                ),
+                            },
+                        ),
+                        "Motion": List(
+                            [
+                                Double(
+                                    -0.07219553851498635,
+                                ),
+                                Double(
+                                    0.2,
+                                ),
+                                Double(
+                                    -0.008638552277780764,
+                                ),
+                            ],
+                        ),
+                        "OnGround": Byte(
+                            0,
+                        ),
+                        "PickupDelay": Short(
+                            10,
+                        ),
+                        "PortalCooldown": Int(
+                            0,
+                        ),
+                        "Pos": List(
+                            [
+                                Double(
+                                    409.44684194209384,
+                                ),
+                                Double(
+                                    0.36538303525713633,
+                                ),
+                                Double(
+                                    7.712337681756208,
+                                ),
+                            ],
+                        ),
+                        "Rotation": List(
+                            [
+                                Float(
+                                    235.9196,
+                                ),
+                                Float(
+                                    0.0,
+                                ),
+                            ],
+                        ),
+                        "UUID": IntArray(
+                            [
+                                -953458802,
+                                -2067182417,
+                                -2086251241,
+                                -1564966390,
+                            ],
+                        ),
+                        "id": String(
+                            "minecraft:item",
+                        ),
+                    },
+                ),
+                Compound(
+                    {
+                        "Age": Short(
+                            0,
+                        ),
+                        "Air": Short(
+                            300,
+                        ),
+                        "FallDistance": Float(
+                            0.0,
+                        ),
+                        "Fire": Short(
+                            -1,
+                        ),
+                        "Health": Short(
+                            5,
+                        ),
+                        "Invulnerable": Byte(
+                            0,
+                        ),
+                        "Item": Compound(
+                            {
+                                "Count": Byte(
+                                    1,
+                                ),
+                                "id": String(
+                                    "minecraft:flowering_azalea",
+                                ),
+                            },
+                        ),
+                        "Motion": List(
+                            [
+                                Double(
+                                    -0.021217578738165252,
+                                ),
+                                Double(
+                                    0.2,
+                                ),
+                                Double(
+                                    0.04644175403406142,
+                                ),
+                            ],
+                        ),
+                        "OnGround": Byte(
+                            0,
+                        ),
+                        "PickupDelay": Short(
+                            10,
+                        ),
+                        "PortalCooldown": Int(
+                            0,
+                        ),
+                        "Pos": List(
+                            [
+                                Double(
+                                    408.2502374222865,
+                                ),
+                                Double(
+                                    0.5801405579207064,
+                                ),
+                                Double(
+                                    8.63279009766499,
+                                ),
+                            ],
+                        ),
+                        "Rotation": List(
+                            [
+                                Float(
+                                    240.24025,
+                                ),
+                                Float(
+                                    0.0,
+                                ),
+                            ],
+                        ),
+                        "UUID": IntArray(
+                            [
+                                -1956247437,
+                                684672989,
+                                -1891077564,
+                                1391749505,
+                            ],
+                        ),
+                        "id": String(
+                            "minecraft:item",
+                        ),
+                    },
+                ),
+                Compound(
+                    {
+                        "Age": Short(
+                            0,
+                        ),
+                        "Air": Short(
+                            300,
+                        ),
+                        "FallDistance": Float(
+                            0.0,
+                        ),
+                        "Fire": Short(
+                            -1,
+                        ),
+                        "Health": Short(
+                            5,
+                        ),
+                        "Invulnerable": Byte(
+                            0,
+                        ),
+                        "Item": Compound(
+                            {
+                                "Count": Byte(
+                                    1,
+                                ),
+                                "id": String(
+                                    "minecraft:azalea",
+                                ),
+                            },
+                        ),
+                        "Motion": List(
+                            [
+                                Double(
+                                    -0.02594423368960537,
+                                ),
+                                Double(
+                                    0.2,
+                                ),
+                                Double(
+                                    0.0011212473382205823,
+                                ),
+                            ],
+                        ),
+                        "OnGround": Byte(
+                            0,
+                        ),
+                        "PickupDelay": Short(
+                            10,
+                        ),
+                        "PortalCooldown": Int(
+                            0,
+                        ),
+                        "Pos": List(
+                            [
+                                Double(
+                                    412.7423877323676,
+                                ),
+                                Double(
+                                    0.5601797482494537,
+                                ),
+                                Double(
+                                    13.421491231058132,
+                                ),
+                            ],
+                        ),
+                        "Rotation": List(
+                            [
+                                Float(
+                                    269.29202,
+                                ),
+                                Float(
+                                    0.0,
+                                ),
+                            ],
+                        ),
+                        "UUID": IntArray(
+                            [
+                                -268955477,
+                                284117159,
+                                -1924938573,
+                                -1501648414,
+                            ],
+                        ),
+                        "id": String(
+                            "minecraft:item",
+                        ),
+                    },
+                ),
+                Compound(
+                    {
+                        "Age": Short(
+                            0,
+                        ),
+                        "Air": Short(
+                            300,
+                        ),
+                        "FallDistance": Float(
+                            0.0,
+                        ),
+                        "Fire": Short(
+                            -1,
+                        ),
+                        "Health": Short(
+                            5,
+                        ),
+                        "Invulnerable": Byte(
+                            0,
+                        ),
+                        "Item": Compound(
+                            {
+                                "Count": Byte(
+                                    1,
+                                ),
+                                "id": String(
+                                    "minecraft:moss_carpet",
+                                ),
+                            },
+                        ),
+                        "Motion": List(
+                            [
+                                Double(
+                                    -0.06685817506779686,
+                                ),
+                                Double(
+                                    0.2,
+                                ),
+                                Double(
+                                    -0.0604435128740658,
+                                ),
+                            ],
+                        ),
+                        "OnGround": Byte(
+                            0,
+                        ),
+                        "PickupDelay": Short(
+                            10,
+                        ),
+                        "PortalCooldown": Int(
+                            0,
+                        ),
+                        "Pos": List(
+                            [
+                                Double(
+                                    412.43428719546506,
+                                ),
+                                Double(
+                                    0.2111211309474167,
+                                ),
+                                Double(
+                                    14.488510922743666,
+                                ),
+                            ],
+                        ),
+                        "Rotation": List(
+                            [
+                                Float(
+                                    64.55221,
+                                ),
+                                Float(
+                                    0.0,
+                                ),
+                            ],
+                        ),
+                        "UUID": IntArray(
+                            [
+                                1128843378,
+                                -1708636744,
+                                -1253972307,
+                                -471300675,
+                            ],
+                        ),
+                        "id": String(
+                            "minecraft:item",
+                        ),
+                    },
+                ),
+            ],
+        ),
+        "Position": IntArray(
+            [
+                25,
+                0,
+            ],
+        ),
+    },
+)
+Compound(
+    {
+        "DataVersion": Int(
+            3578,
+        ),
+        "Entities": List(
+            [
+                Compound(
+                    {
+                        "Age": Short(
+                            301,
+                        ),
+                        "Air": Short(
+                            300,
+                        ),
+                        "FallDistance": Float(
+                            0.0,
+                        ),
+                        "Fire": Short(
+                            0,
+                        ),
+                        "Health": Short(
+                            5,
+                        ),
+                        "Invulnerable": Byte(
+                            0,
+                        ),
+                        "Item": Compound(
+                            {
+                                "Count": Byte(
+                                    1,
+                                ),
+                                "id": String(
+                                    "minecraft:moss_carpet",
+                                ),
+                            },
+                        ),
+                        "Motion": List(
+                            [
+                                Double(
+                                    0.014,
+                                ),
+                                Double(
+                                    0.007469184748769912,
+                                ),
+                                Double(
+                                    0.0,
+                                ),
+                            ],
+                        ),
+                        "OnGround": Byte(
+                            0,
+                        ),
+                        "PickupDelay": Short(
+                            0,
+                        ),
+                        "PortalCooldown": Int(
+                            0,
+                        ),
+                        "Pos": List(
+                            [
+                                Double(
+                                    351.875,
+                                ),
+                                Double(
+                                    2.076540783935357,
+                                ),
+                                Double(
+                                    24.875,
+                                ),
+                            ],
+                        ),
+                        "Rotation": List(
+                            [
+                                Float(
+                                    19.744213,
+                                ),
+                                Float(
+                                    0.0,
+                                ),
+                            ],
+                        ),
+                        "UUID": IntArray(
+                            [
+                                1264698356,
+                                -733525950,
+                                -1511359045,
+                                -26208081,
+                            ],
+                        ),
+                        "id": String(
+                            "minecraft:item",
+                        ),
+                    },
+                ),
+                Compound(
+                    {
+                        "Age": Short(
+                            291,
+                        ),
+                        "Air": Short(
+                            300,
+                        ),
+                        "FallDistance": Float(
+                            0.0,
+                        ),
+                        "Fire": Short(
+                            0,
+                        ),
+                        "Health": Short(
+                            5,
+                        ),
+                        "Invulnerable": Byte(
+                            0,
+                        ),
+                        "Item": Compound(
+                            {
+                                "Count": Byte(
+                                    1,
+                                ),
+                                "id": String(
+                                    "minecraft:moss_carpet",
+                                ),
+                            },
+                        ),
+                        "Motion": List(
+                            [
+                                Double(
+                                    0.014,
+                                ),
+                                Double(
+                                    0.0044817164441251995,
+                                ),
+                                Double(
+                                    0.0,
+                                ),
+                            ],
+                        ),
+                        "OnGround": Byte(
+                            0,
+                        ),
+                        "PickupDelay": Short(
+                            0,
+                        ),
+                        "PortalCooldown": Int(
+                            0,
+                        ),
+                        "Pos": List(
+                            [
+                                Double(
+                                    351.875,
+                                ),
+                                Double(
+                                    2.0259141896681028,
+                                ),
+                                Double(
+                                    24.125,
+                                ),
+                            ],
+                        ),
+                        "Rotation": List(
+                            [
+                                Float(
+                                    7.283807,
+                                ),
+                                Float(
+                                    0.0,
+                                ),
+                            ],
+                        ),
+                        "UUID": IntArray(
+                            [
+                                776239218,
+                                1903707382,
+                                -1403102811,
+                                -1955188778,
+                            ],
+                        ),
+                        "id": String(
+                            "minecraft:item",
+                        ),
+                    },
+                ),
+                Compound(
+                    {
+                        "Age": Short(
+                            281,
+                        ),
+                        "Air": Short(
+                            300,
+                        ),
+                        "FallDistance": Float(
+                            0.0,
+                        ),
+                        "Fire": Short(
+                            -1,
+                        ),
+                        "Health": Short(
+                            5,
+                        ),
+                        "Invulnerable": Byte(
+                            0,
+                        ),
+                        "Item": Compound(
+                            {
+                                "Count": Byte(
+                                    1,
+                                ),
+                                "id": String(
+                                    "minecraft:moss_carpet",
+                                ),
+                            },
+                        ),
+                        "Motion": List(
+                            [
+                                Double(
+                                    1.8489687264053824e-18,
+                                ),
+                                Double(
+                                    0.0,
+                                ),
+                                Double(
+                                    0.0,
+                                ),
+                            ],
+                        ),
+                        "OnGround": Byte(
+                            1,
+                        ),
+                        "PickupDelay": Short(
+                            0,
+                        ),
+                        "PortalCooldown": Int(
+                            0,
+                        ),
+                        "Pos": List(
+                            [
+                                Double(
+                                    351.77387577369393,
+                                ),
+                                Double(
+                                    2.0,
+                                ),
+                                Double(
+                                    17.75,
+                                ),
+                            ],
+                        ),
+                        "Rotation": List(
+                            [
+                                Float(
+                                    268.97525,
+                                ),
+                                Float(
+                                    0.0,
+                                ),
+                            ],
+                        ),
+                        "UUID": IntArray(
+                            [
+                                995472054,
+                                1594379946,
+                                -1184961282,
+                                314980325,
+                            ],
+                        ),
+                        "id": String(
+                            "minecraft:item",
+                        ),
+                    },
+                ),
+            ],
+        ),
+        "Position": IntArray(
+            [
+                21,
+                1,
+            ],
+        ),
+    },
+)
+Compound(
+    {
+        "DataVersion": Int(
+            3578,
+        ),
+        "Entities": List(
+            [
+                Compound(
+                    {
+                        "AbsorptionAmount": Float(
+                            0.0,
+                        ),
+                        "Age": Int(
+                            0,
+                        ),
+                        "Air": Short(
+                            300,
+                        ),
+                        "ArmorDropChances": List(
+                            [
+                                Float(
+                                    0.085,
+                                ),
+                                Float(
+                                    0.085,
+                                ),
+                                Float(
+                                    0.085,
+                                ),
+                                Float(
+                                    0.085,
+                                ),
+                            ],
+                        ),
+                        "ArmorItems": List(
+                            [
+                                Compound(
+                                    {},
+                                ),
+                                Compound(
+                                    {},
+                                ),
+                                Compound(
+                                    {},
+                                ),
+                                Compound(
+                                    {},
+                                ),
+                            ],
+                        ),
+                        "Attributes": List(
+                            [
+                                Compound(
+                                    {
+                                        "Base": Double(
+                                            0.25,
+                                        ),
+                                        "Name": String(
+                                            "minecraft:generic.movement_speed",
+                                        ),
+                                    },
+                                ),
+                                Compound(
+                                    {
+                                        "Base": Double(
+                                            16.0,
+                                        ),
+                                        "Modifiers": List(
+                                            [
+                                                Compound(
+                                                    {
+                                                        "Amount": Double(
+                                                            -0.0021550574278985982,
+                                                        ),
+                                                        "Name": String(
+                                                            "Random spawn bonus",
+                                                        ),
+                                                        "Operation": Int(
+                                                            1,
+                                                        ),
+                                                        "UUID": IntArray(
+                                                            [
+                                                                -1990273058,
+                                                                -869251655,
+                                                                -2055406114,
+                                                                453389499,
+                                                            ],
+                                                        ),
+                                                    },
+                                                ),
+                                            ],
+                                        ),
+                                        "Name": String(
+                                            "minecraft:generic.follow_range",
+                                        ),
+                                    },
+                                ),
+                            ],
+                        ),
+                        "Brain": Compound(
+                            {
+                                "memories": Compound(
+                                    {},
+                                ),
+                            },
+                        ),
+                        "CanPickUpLoot": Byte(
+                            0,
+                        ),
+                        "DeathTime": Short(
+                            0,
+                        ),
+                        "FallDistance": Float(
+                            0.0,
+                        ),
+                        "FallFlying": Byte(
+                            0,
+                        ),
+                        "Fire": Short(
+                            -1,
+                        ),
+                        "ForcedAge": Int(
+                            0,
+                        ),
+                        "HandDropChances": List(
+                            [
+                                Float(
+                                    0.085,
+                                ),
+                                Float(
+                                    0.085,
+                                ),
+                            ],
+                        ),
+                        "HandItems": List(
+                            [
+                                Compound(
+                                    {},
+                                ),
+                                Compound(
+                                    {},
+                                ),
+                            ],
+                        ),
+                        "Health": Float(
+                            9.0,
+                        ),
+                        "HurtByTimestamp": Int(
+                            0,
+                        ),
+                        "HurtTime": Short(
+                            0,
+                        ),
+                        "InLove": Int(
+                            0,
+                        ),
+                        "Invulnerable": Byte(
+                            0,
+                        ),
+                        "LeftHanded": Byte(
+                            0,
+                        ),
+                        "Motion": List(
+                            [
+                                Double(
+                                    0.022534621465613726,
+                                ),
+                                Double(
+                                    0.16477328182606651,
+                                ),
+                                Double(
+                                    0.0042886981117597565,
+                                ),
+                            ],
+                        ),
+                        "OnGround": Byte(
+                            0,
+                        ),
+                        "PersistenceRequired": Byte(
+                            0,
+                        ),
+                        "PortalCooldown": Int(
+                            0,
+                        ),
+                        "Pos": List(
+                            [
+                                Double(
+                                    369.3248694059218,
+                                ),
+                                Double(
+                                    66.00133597911214,
+                                ),
+                                Double(
+                                    41.554712866852974,
+                                ),
+                            ],
+                        ),
+                        "Rotation": List(
+                            [
+                                Float(
+                                    344.11667,
+                                ),
+                                Float(
+                                    0.0,
+                                ),
+                            ],
+                        ),
+                        "Saddle": Byte(
+                            0,
+                        ),
+                        "UUID": IntArray(
+                            [
+                                1036887537,
+                                1760774631,
+                                -1670048426,
+                                -739604316,
+                            ],
+                        ),
+                        "id": String(
+                            "minecraft:pig",
+                        ),
+                    },
+                ),
+            ],
+        ),
+        "Position": IntArray(
+            [
+                23,
+                2,
+            ],
+        ),
+    },
+)
+Compound(
+    {
+        "DataVersion": Int(
+            3578,
+        ),
+        "Entities": List(
+            [
+                Compound(
+                    {
+                        "Air": Short(
+                            300,
+                        ),
+                        "FallDistance": Float(
+                            0.0,
+                        ),
+                        "Fire": Short(
+                            -1,
+                        ),
+                        "Invulnerable": Byte(
+                            0,
+                        ),
+                        "LootTable": String(
+                            "minecraft:chests/abandoned_mineshaft",
+                        ),
+                        "LootTableSeed": Long(
+                            -340212844424443851,
+                        ),
+                        "Motion": List(
+                            [
+                                Double(
+                                    0.0,
+                                ),
+                                Double(
+                                    0.0,
+                                ),
+                                Double(
+                                    0.0,
+                                ),
+                            ],
+                        ),
+                        "OnGround": Byte(
+                            0,
+                        ),
+                        "PortalCooldown": Int(
+                            0,
+                        ),
+                        "Pos": List(
+                            [
+                                Double(
+                                    384.5,
+                                ),
+                                Double(
+                                    -20.9375,
+                                ),
+                                Double(
+                                    40.5,
+                                ),
+                            ],
+                        ),
+                        "Rotation": List(
+                            [
+                                Float(
+                                    0.0,
+                                ),
+                                Float(
+                                    0.0,
+                                ),
+                            ],
+                        ),
+                        "UUID": IntArray(
+                            [
+                                448728048,
+                                -1611972499,
+                                -1835352802,
+                                -1775864,
+                            ],
+                        ),
+                        "id": String(
+                            "minecraft:chest_minecart",
+                        ),
+                    },
+                ),
+            ],
+        ),
+        "Position": IntArray(
+            [
+                24,
+                2,
+            ],
+        ),
+    },
+)
+Compound(
+    {
+        "DataVersion": Int(
+            3578,
+        ),
+        "Entities": List(
+            [
+                Compound(
+                    {
+                        "AbsorptionAmount": Float(
+                            0.0,
+                        ),
+                        "Age": Int(
+                            0,
+                        ),
+                        "Air": Short(
+                            300,
+                        ),
+                        "AngerTime": Int(
+                            0,
+                        ),
+                        "ArmorDropChances": List(
+                            [
+                                Float(
+                                    0.085,
+                                ),
+                                Float(
+                                    0.085,
+                                ),
+                                Float(
+                                    0.085,
+                                ),
+                                Float(
+                                    0.085,
+                                ),
+                            ],
+                        ),
+                        "ArmorItems": List(
+                            [
+                                Compound(
+                                    {},
+                                ),
+                                Compound(
+                                    {},
+                                ),
+                                Compound(
+                                    {},
+                                ),
+                                Compound(
+                                    {},
+                                ),
+                            ],
+                        ),
+                        "Attributes": List(
+                            [
+                                Compound(
+                                    {
+                                        "Base": Double(
+                                            8.0,
+                                        ),
+                                        "Name": String(
+                                            "minecraft:generic.max_health",
+                                        ),
+                                    },
+                                ),
+                                Compound(
+                                    {
+                                        "Base": Double(
+                                            4.0,
+                                        ),
+                                        "Name": String(
+                                            "minecraft:generic.attack_damage",
+                                        ),
+                                    },
+                                ),
+                                Compound(
+                                    {
+                                        "Base": Double(
+                                            16.0,
+                                        ),
+                                        "Modifiers": List(
+                                            [
+                                                Compound(
+                                                    {
+                                                        "Amount": Double(
+                                                            -0.09611031432045507,
+                                                        ),
+                                                        "Name": String(
+                                                            "Random spawn bonus",
+                                                        ),
+                                                        "Operation": Int(
+                                                            1,
+                                                        ),
+                                                        "UUID": IntArray(
+                                                            [
+                                                                -1502805711,
+                                                                1662405561,
+                                                                -1526591950,
+                                                                -346406690,
+                                                            ],
+                                                        ),
+                                                    },
+                                                ),
+                                            ],
+                                        ),
+                                        "Name": String(
+                                            "minecraft:generic.follow_range",
+                                        ),
+                                    },
+                                ),
+                            ],
+                        ),
+                        "Brain": Compound(
+                            {
+                                "memories": Compound(
+                                    {},
+                                ),
+                            },
+                        ),
+                        "CanPickUpLoot": Byte(
+                            0,
+                        ),
+                        "CollarColor": Byte(
+                            14,
+                        ),
+                        "DeathTime": Short(
+                            0,
+                        ),
+                        "FallDistance": Float(
+                            0.0,
+                        ),
+                        "FallFlying": Byte(
+                            0,
+                        ),
+                        "Fire": Short(
+                            -1,
+                        ),
+                        "ForcedAge": Int(
+                            0,
+                        ),
+                        "HandDropChances": List(
+                            [
+                                Float(
+                                    0.085,
+                                ),
+                                Float(
+                                    0.085,
+                                ),
+                            ],
+                        ),
+                        "HandItems": List(
+                            [
+                                Compound(
+                                    {},
+                                ),
+                                Compound(
+                                    {},
+                                ),
+                            ],
+                        ),
+                        "Health": Float(
+                            8.0,
+                        ),
+                        "HurtByTimestamp": Int(
+                            0,
+                        ),
+                        "HurtTime": Short(
+                            0,
+                        ),
+                        "InLove": Int(
+                            0,
+                        ),
+                        "Invulnerable": Byte(
+                            0,
+                        ),
+                        "LeftHanded": Byte(
+                            0,
+                        ),
+                        "Motion": List(
+                            [
+                                Double(
+                                    0.0,
+                                ),
+                                Double(
+                                    0.0,
+                                ),
+                                Double(
+                                    0.0,
+                                ),
+                            ],
+                        ),
+                        "OnGround": Byte(
+                            0,
+                        ),
+                        "PersistenceRequired": Byte(
+                            0,
+                        ),
+                        "PortalCooldown": Int(
+                            0,
+                        ),
+                        "Pos": List(
+                            [
+                                Double(
+                                    370.0,
+                                ),
+                                Double(
+                                    73.0,
+                                ),
+                                Double(
+                                    72.0,
+                                ),
+                            ],
+                        ),
+                        "Rotation": List(
+                            [
+                                Float(
+                                    54.595207,
+                                ),
+                                Float(
+                                    0.0,
+                                ),
+                            ],
+                        ),
+                        "Sitting": Byte(
+                            0,
+                        ),
+                        "UUID": IntArray(
+                            [
+                                -494597469,
+                                -334934787,
+                                -1739909207,
+                                1190609638,
+                            ],
+                        ),
+                        "id": String(
+                            "minecraft:wolf",
+                        ),
+                    },
+                ),
+                Compound(
+                    {
+                        "AbsorptionAmount": Float(
+                            0.0,
+                        ),
+                        "Age": Int(
+                            0,
+                        ),
+                        "Air": Short(
+                            300,
+                        ),
+                        "AngerTime": Int(
+                            0,
+                        ),
+                        "ArmorDropChances": List(
+                            [
+                                Float(
+                                    0.085,
+                                ),
+                                Float(
+                                    0.085,
+                                ),
+                                Float(
+                                    0.085,
+                                ),
+                                Float(
+                                    0.085,
+                                ),
+                            ],
+                        ),
+                        "ArmorItems": List(
+                            [
+                                Compound(
+                                    {},
+                                ),
+                                Compound(
+                                    {},
+                                ),
+                                Compound(
+                                    {},
+                                ),
+                                Compound(
+                                    {},
+                                ),
+                            ],
+                        ),
+                        "Attributes": List(
+                            [
+                                Compound(
+                                    {
+                                        "Base": Double(
+                                            8.0,
+                                        ),
+                                        "Name": String(
+                                            "minecraft:generic.max_health",
+                                        ),
+                                    },
+                                ),
+                                Compound(
+                                    {
+                                        "Base": Double(
+                                            4.0,
+                                        ),
+                                        "Name": String(
+                                            "minecraft:generic.attack_damage",
+                                        ),
+                                    },
+                                ),
+                                Compound(
+                                    {
+                                        "Base": Double(
+                                            16.0,
+                                        ),
+                                        "Modifiers": List(
+                                            [
+                                                Compound(
+                                                    {
+                                                        "Amount": Double(
+                                                            0.08752592005154543,
+                                                        ),
+                                                        "Name": String(
+                                                            "Random spawn bonus",
+                                                        ),
+                                                        "Operation": Int(
+                                                            1,
+                                                        ),
+                                                        "UUID": IntArray(
+                                                            [
+                                                                -1383606921,
+                                                                691225021,
+                                                                -1485805260,
+                                                                -1461472768,
+                                                            ],
+                                                        ),
+                                                    },
+                                                ),
+                                            ],
+                                        ),
+                                        "Name": String(
+                                            "minecraft:generic.follow_range",
+                                        ),
+                                    },
+                                ),
+                            ],
+                        ),
+                        "Brain": Compound(
+                            {
+                                "memories": Compound(
+                                    {},
+                                ),
+                            },
+                        ),
+                        "CanPickUpLoot": Byte(
+                            0,
+                        ),
+                        "CollarColor": Byte(
+                            14,
+                        ),
+                        "DeathTime": Short(
+                            0,
+                        ),
+                        "FallDistance": Float(
+                            0.0,
+                        ),
+                        "FallFlying": Byte(
+                            0,
+                        ),
+                        "Fire": Short(
+                            -1,
+                        ),
+                        "ForcedAge": Int(
+                            0,
+                        ),
+                        "HandDropChances": List(
+                            [
+                                Float(
+                                    0.085,
+                                ),
+                                Float(
+                                    0.085,
+                                ),
+                            ],
+                        ),
+                        "HandItems": List(
+                            [
+                                Compound(
+                                    {},
+                                ),
+                                Compound(
+                                    {},
+                                ),
+                            ],
+                        ),
+                        "Health": Float(
+                            8.0,
+                        ),
+                        "HurtByTimestamp": Int(
+                            0,
+                        ),
+                        "HurtTime": Short(
+                            0,
+                        ),
+                        "InLove": Int(
+                            0,
+                        ),
+                        "Invulnerable": Byte(
+                            0,
+                        ),
+                        "LeftHanded": Byte(
+                            0,
+                        ),
+                        "Motion": List(
+                            [
+                                Double(
+                                    0.0,
+                                ),
+                                Double(
+                                    0.0,
+                                ),
+                                Double(
+                                    0.0,
+                                ),
+                            ],
+                        ),
+                        "OnGround": Byte(
+                            0,
+                        ),
+                        "PersistenceRequired": Byte(
+                            0,
+                        ),
+                        "PortalCooldown": Int(
+                            0,
+                        ),
+                        "Pos": List(
+                            [
+                                Double(
+                                    370.0,
+                                ),
+                                Double(
+                                    73.0,
+                                ),
+                                Double(
+                                    71.0,
+                                ),
+                            ],
+                        ),
+                        "Rotation": List(
+                            [
+                                Float(
+                                    301.43542,
+                                ),
+                                Float(
+                                    0.0,
+                                ),
+                            ],
+                        ),
+                        "Sitting": Byte(
+                            0,
+                        ),
+                        "UUID": IntArray(
+                            [
+                                664468533,
+                                -391558873,
+                                -1380968013,
+                                882502764,
+                            ],
+                        ),
+                        "id": String(
+                            "minecraft:wolf",
+                        ),
+                    },
+                ),
+            ],
+        ),
+        "Position": IntArray(
+            [
+                23,
+                4,
+            ],
+        ),
+    },
+)

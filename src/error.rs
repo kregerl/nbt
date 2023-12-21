@@ -7,10 +7,10 @@ use serde::{de, ser};
 
 use crate::kind::NBTKind;
 
-pub type Result<T> = std::result::Result<T, NBTError>;
+pub type Result<T> = std::result::Result<T, Error>;
 
 #[derive(Debug)]
-pub enum NBTError {
+pub enum Error {
     IoError(io::Error),
     Message(String),
     Eof,
@@ -18,55 +18,41 @@ pub enum NBTError {
     InvalidTagId,
     MismatchedTag(NBTKind, NBTKind),
     ExpectedBooleanByte(i8),
-
-    ExpectedBoolean,
-    ExpectedInteger,
-    ExpectedString,
-    ExpectedNull,
-    ExpectedArray,
-    ExpectedArrayComma,
-    ExpectedArrayEnd,
-    ExpectedMap,
-    ExpectedMapColon,
-    ExpectedMapComma,
-    ExpectedMapEnd,
-    ExpectedEnum,
-    TrailingCharacters,
 }
 
-impl ser::Error for NBTError {
+impl ser::Error for Error {
     fn custom<T: Display>(msg: T) -> Self {
-        NBTError::Message(msg.to_string())
+        Error::Message(msg.to_string())
     }
 }
 
-impl de::Error for NBTError {
+impl de::Error for Error {
     fn custom<T: Display>(msg: T) -> Self {
-        NBTError::Message(msg.to_string())
+        Error::Message(msg.to_string())
     }
 }
 
-impl Display for NBTError {
+impl Display for Error {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            NBTError::Message(msg) => formatter.write_str(msg),
-            NBTError::MismatchedTag(received, expected) => formatter.write_fmt(format_args!(
+            Error::Message(msg) => formatter.write_str(msg),
+            Error::MismatchedTag(received, expected) => formatter.write_fmt(format_args!(
                 "Expected {} tag but received {}",
                 expected, received
             )),
-            NBTError::ExpectedBooleanByte(byte) => {
+            Error::ExpectedBooleanByte(byte) => {
                 formatter.write_fmt(format_args!("Expected a boolean value but got {}", byte))
             }
-            NBTError::Eof => formatter.write_str("unexpected end of input"),
+            Error::Eof => formatter.write_str("unexpected end of input"),
             _ => todo!("Fill out errors: {}", self),
         }
     }
 }
 
-impl From<io::Error> for NBTError {
+impl From<io::Error> for Error {
     fn from(value: io::Error) -> Self {
-        NBTError::IoError(value)
+        Error::IoError(value)
     }
 }
 
-impl std::error::Error for NBTError {}
+impl std::error::Error for Error {}

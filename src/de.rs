@@ -1,18 +1,19 @@
-use std::io::{self, Cursor, Read};
+use std::io::{self, Cursor};
 
 use crate::{
-    error::{self, NBTError},
+    error::{self, Error},
     kind::NBTKind,
 };
 use byteorder::ReadBytesExt;
+use flate2::read::{GzDecoder, ZlibDecoder};
 use serde::{
     de::{self, MapAccess, SeqAccess},
     forward_to_deserialize_any, Deserialize,
 };
 
 // Wrapper deserializeer that consumes the nameless root compound NBT tag
-pub struct NBTDeserializer<'de> {
-    cursor: Cursor<&'de [u8]>,
+pub struct NBTDeserializer<R: io::Read> {
+    cursor: R,
 }
 
 // Macro for generating parsing function implementations of number types
@@ -26,13 +27,8 @@ macro_rules! parse_number_types {
     };
 }
 
-impl<'de> NBTDeserializer<'de> {
+impl<R: io::Read> NBTDeserializer<R> {
     parse_number_types!(i16, i32, i64, f32, f64);
-
-    fn has_bytes_left(&self) -> bool {
-        let len = self.cursor.get_ref().len();
-        (self.cursor.position() as usize) < len.saturating_sub(1)
-    }
 
     fn parse_kind(&mut self) -> io::Result<NBTKind> {
         Ok(NBTKind::from(self.cursor.read_u8()?))
@@ -55,24 +51,56 @@ impl<'de> NBTDeserializer<'de> {
     }
 }
 
-impl<'de> NBTDeserializer<'de> {
-    pub fn from_slice(bytes: &'de [u8]) -> Self {
-        NBTDeserializer {
-            cursor: Cursor::new(bytes),
-        }
+impl NBTDeserializer<Cursor<Vec<u8>>> {
+    fn from_slice(bytes: Vec<u8>) -> Self {
+        let reader = Cursor::new(bytes);
+        NBTDeserializer { cursor: reader }
     }
 }
 
-pub fn from_slice<'a, T>(s: &'a [u8]) -> error::Result<T>
+impl<R: io::Read> NBTDeserializer<R> {
+    fn from_reader(reader: R) -> Self {
+        NBTDeserializer { cursor: reader }
+    }
+}
+
+pub fn from_reader<'a, T, R>(s: R) -> error::Result<T>
 where
     T: Deserialize<'a>,
+    R: io::Read,
 {
-    let mut deserializer = NBTDeserializer::from_slice(s);
+    let mut deserializer = NBTDeserializer::from_reader(s);
     T::deserialize(&mut deserializer)
 }
 
-impl<'de, 'a> serde::de::Deserializer<'de> for &'a mut NBTDeserializer<'de> {
-    type Error = NBTError;
+pub fn from_gzip_reader<'a, T, R>(s: R) -> error::Result<T>
+where
+    T: Deserialize<'a>,
+    R: io::Read,
+{
+    let gzip = GzDecoder::new(s);
+    from_reader(gzip)
+}
+
+pub fn from_zlib_reader<'a, T, R>(s: R) -> error::Result<T>
+where
+    T: Deserialize<'a>,
+    R: io::Read,
+{
+    let zlib = ZlibDecoder::new(s);
+    from_reader(zlib)
+}
+
+pub fn from_slice<'a, T>(s: Vec<u8>) -> error::Result<T>
+where
+    T: Deserialize<'a>,
+{
+    let mut deserializer: NBTDeserializer<Cursor<Vec<u8>>> = NBTDeserializer::from_slice(s);
+    T::deserialize(&mut deserializer)
+}
+
+impl<'de, 'a, R: io::Read> serde::de::Deserializer<'de> for &'a mut NBTDeserializer<R> {
+    type Error = Error;
 
     forward_to_deserialize_any! {
         bool u8 u16 u32 u64 i8 i16 i32 i64 f32 f64 char str string bytes byte_buf
@@ -84,7 +112,7 @@ impl<'de, 'a> serde::de::Deserializer<'de> for &'a mut NBTDeserializer<'de> {
         V: de::Visitor<'de>,
     {
         // File is not valid if there is no root compound NBT tag.
-        Err(NBTError::ExpectedRootCompound)
+        Err(Error::ExpectedRootCompound)
     }
 
     fn deserialize_unit_struct<V>(
@@ -113,18 +141,13 @@ impl<'de, 'a> serde::de::Deserializer<'de> for &'a mut NBTDeserializer<'de> {
     where
         V: de::Visitor<'de>,
     {
-        // EOF if theres no bytes remaining.
-        if !self.has_bytes_left() {
-            return Err(NBTError::Eof);
-        }
-
         // Error if there is no root compound NBT tag
         let kind = self.parse_kind()?;
         if let NBTKind::Compound = kind {
             let _ = self.parse_string()?;
             visitor.visit_map(NBTMapDeserializer::new(self))
         } else {
-            Err(NBTError::ExpectedRootCompound)
+            Err(Error::ExpectedRootCompound)
         }
     }
 
@@ -143,19 +166,19 @@ impl<'de, 'a> serde::de::Deserializer<'de> for &'a mut NBTDeserializer<'de> {
 
 /// Deserializer for compound NBT tags.
 /// Holds the outer NBT deserializer since thats where all the parsing functions are.
-struct NBTMapDeserializer<'de, 'a> {
-    outer: &'a mut NBTDeserializer<'de>,
+struct NBTMapDeserializer<'a, R: io::Read> {
+    outer: &'a mut NBTDeserializer<R>,
     kind: Option<NBTKind>,
 }
 
-impl<'de, 'a> NBTMapDeserializer<'de, 'a> {
-    fn new(outer: &'a mut NBTDeserializer<'de>) -> Self {
+impl<'de, 'a, R: io::Read> NBTMapDeserializer<'a, R> {
+    fn new(outer: &'a mut NBTDeserializer<R>) -> Self {
         Self { outer, kind: None }
     }
 }
 
-impl<'de, 'a> MapAccess<'de> for NBTMapDeserializer<'de, 'a> {
-    type Error = NBTError;
+impl<'de, 'a, R: io::Read> MapAccess<'de> for NBTMapDeserializer<'a, R> {
+    type Error = Error;
 
     fn next_key_seed<K>(&mut self, seed: K) -> Result<Option<K::Value>, Self::Error>
     where
@@ -191,16 +214,16 @@ impl<'de, 'a> MapAccess<'de> for NBTMapDeserializer<'de, 'a> {
 }
 
 /// Deserializes a compount NBT tag
-struct NBTSeqDeserializer<'de, 'a> {
-    outer: &'a mut NBTDeserializer<'de>,
+struct NBTSeqDeserializer<'a, R: io::Read> {
+    outer: &'a mut NBTDeserializer<R>,
     kind: NBTKind,
     length: i32,
     current_pos: i32,
 }
 
-impl<'de, 'a> NBTSeqDeserializer<'de, 'a> {
+impl<'a, R: io::Read> NBTSeqDeserializer<'a, R> {
     /// Creates a sequence deserializer for a NBT list where the type is defined as part of the list
-    fn from_list(outer: &'a mut NBTDeserializer<'de>) -> io::Result<Self> {
+    fn from_list(outer: &'a mut NBTDeserializer<R>) -> io::Result<Self> {
         let kind = outer.parse_kind()?;
         let length = outer.parse_i32()?;
         Ok(Self {
@@ -212,7 +235,7 @@ impl<'de, 'a> NBTSeqDeserializer<'de, 'a> {
     }
 
     /// Creates a sequence deserializer for a NBT array of type `kind`
-    fn from_array(outer: &'a mut NBTDeserializer<'de>, kind: NBTKind) -> io::Result<Self> {
+    fn from_array(outer: &'a mut NBTDeserializer<R>, kind: NBTKind) -> io::Result<Self> {
         let length = outer.parse_i32()?;
         Ok(Self {
             outer,
@@ -223,8 +246,8 @@ impl<'de, 'a> NBTSeqDeserializer<'de, 'a> {
     }
 }
 
-impl<'de, 'a> SeqAccess<'de> for NBTSeqDeserializer<'de, 'a> {
-    type Error = NBTError;
+impl<'de, 'a, R: io::Read> SeqAccess<'de> for NBTSeqDeserializer<'a, R> {
+    type Error = Error;
 
     fn next_element_seed<T>(&mut self, seed: T) -> Result<Option<T::Value>, Self::Error>
     where
@@ -243,19 +266,19 @@ impl<'de, 'a> SeqAccess<'de> for NBTSeqDeserializer<'de, 'a> {
 }
 
 /// Actual implementation of deserializing NBT tags
-struct NBTDeserializerImpl<'de, 'a> {
-    outer: &'a mut NBTDeserializer<'de>,
+struct NBTDeserializerImpl<'a, R: io::Read> {
+    outer: &'a mut NBTDeserializer<R>,
     kind: NBTKind,
 }
 
-impl<'de, 'a> NBTDeserializerImpl<'de, 'a> {
-    pub fn new(outer: &'a mut NBTDeserializer<'de>, kind: NBTKind) -> Self {
+impl<'a, R: io::Read> NBTDeserializerImpl<'a, R> {
+    pub fn new(outer: &'a mut NBTDeserializer<R>, kind: NBTKind) -> Self {
         Self { outer, kind }
     }
 }
 
-impl<'de, 'a> serde::de::Deserializer<'de> for &'a mut NBTDeserializerImpl<'de, 'a> {
-    type Error = NBTError;
+impl<'de, 'a, R: io::Read> serde::de::Deserializer<'de> for &'a mut NBTDeserializerImpl<'a, R> {
+    type Error = Error;
 
     forward_to_deserialize_any! {
         u8 u16 u32 u64 i8 i16 i32 i64 f32 f64 char str string bytes byte_buf seq
@@ -303,7 +326,7 @@ impl<'de, 'a> serde::de::Deserializer<'de> for &'a mut NBTDeserializerImpl<'de, 
             NBTKind::LongArray => {
                 visitor.visit_seq(NBTSeqDeserializer::from_array(self.outer, NBTKind::Long)?)
             }
-            _ => Err(NBTError::InvalidTagId),
+            _ => Err(Error::InvalidTagId),
         }
     }
 
@@ -315,9 +338,9 @@ impl<'de, 'a> serde::de::Deserializer<'de> for &'a mut NBTDeserializerImpl<'de, 
             NBTKind::Byte => match self.outer.parse_i8()? {
                 0 => visitor.visit_bool(false),
                 1 => visitor.visit_bool(true),
-                value => Err(NBTError::ExpectedBooleanByte(value)),
+                value => Err(Error::ExpectedBooleanByte(value)),
             },
-            _ => Err(NBTError::MismatchedTag(self.kind, NBTKind::Byte)),
+            _ => Err(Error::MismatchedTag(self.kind, NBTKind::Byte)),
         }
     }
 

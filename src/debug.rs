@@ -1,5 +1,5 @@
 use std::{
-    collections::HashMap,
+    collections::{HashMap, BTreeMap},
     fs,
     io::{self, Cursor, Read},
 };
@@ -21,7 +21,7 @@ enum NBTPayload {
     ByteArray(Vec<i8>),
     String(String),
     List(Vec<NBTPayload>),
-    Compound(HashMap<String, NBTPayload>),
+    Compound(BTreeMap<String, NBTPayload>),
     IntArray(Vec<i32>),
     LongArray(Vec<i64>),
 }
@@ -43,6 +43,7 @@ impl NBTTag {
     }
 }
 
+// #[cfg(feature = "debug")]
 pub fn dump_nbt(filename: &str) -> error::Result<()> {
     let mut stream = NBTReader::new(filename).unwrap();
     let tag = stream.parse_nbt();
@@ -55,8 +56,28 @@ pub fn dump_nbt(filename: &str) -> error::Result<()> {
     }
 }
 
+pub fn dump_nbt_from_bytes(bytes: Vec<u8>) -> error::Result<()> {
+    let mut stream = NBTReader::from(bytes);
+    let tag = stream.parse_nbt();
+    match tag {
+        Some(tag) => {
+            println!("{:#?}", tag.payload);
+            Ok(())
+        }
+        None => Err(NBTError::ExpectedRootCompound),
+    }
+}
+
 struct NBTReader {
     cursor: Cursor<Vec<u8>>,
+}
+
+impl From<Vec<u8>> for NBTReader {
+    fn from(value: Vec<u8>) -> Self {
+        Self {
+            cursor: Cursor::new(value)
+        }
+    }
 }
 
 const GZIP_SIGNATURE: [u8; 2] = [0x1f, 0x8b];
@@ -151,7 +172,7 @@ impl NBTReader {
             }
             // Effectively a list of named tags. Order is not guaranteed.
             NBTKind::Compound => {
-                let mut map: HashMap<String, NBTPayload> = HashMap::new();
+                let mut map: BTreeMap<String, NBTPayload> = BTreeMap::new();
                 loop {
                     let tag = self.parse_nbt_tag()?;
                     if let NBTKind::End = tag.kind {

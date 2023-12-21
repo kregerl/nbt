@@ -18,6 +18,27 @@ pub enum NBTKind {
     LongArray,
 }
 
+impl NBTKind {
+    pub fn header_byte(&self) -> u8 {
+        match self {
+            NBTKind::End => 0,
+            NBTKind::Byte => 1,
+            NBTKind::Short => 2,
+            NBTKind::Int => 3,
+            NBTKind::Long => 4,
+            NBTKind::Float => 5,
+            NBTKind::Double => 6,
+            NBTKind::ByteArray => 7,
+            NBTKind::String => 8,
+            NBTKind::List => 9,
+            NBTKind::Compound => 10,
+            NBTKind::IntArray => 11,
+            NBTKind::LongArray => 12,
+            _ => unreachable!("Unknown ID value for NBTTag {}.", self),
+        }
+    }
+}
+
 impl From<u8> for NBTKind {
     fn from(value: u8) -> Self {
         match value {
