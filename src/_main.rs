@@ -1,33 +1,49 @@
-// mod debug;
-// mod de;
-// mod error;
-// mod kind;
-// mod mca;
-// use std::fs;
+use std::fs::{self, File};
 
-// use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
-// use crate::de::from_slice;
+use crate::de::from_slice;
 
-// #[derive(Debug, Deserialize)]
-// struct Server {
-//     ip: String,
-//     name: String,
-// }
+mod de;
+mod debug;
+mod error;
+mod kind;
+mod mca;
+mod parser;
+// mod ser;
+mod writer;
 
-// #[derive(Debug, Deserialize)]
-// struct Servers {
-//     servers: Vec<Server>,
-// }
+#[derive(Debug, Deserialize, Serialize)]
+struct Server {
+    ip: String,
+    name: String,
+}
 
-// fn main() {
-//     // debug::dump_nbt("player.dat").unwrap();
+#[derive(Debug, Deserialize, Serialize)]
+struct Servers {
+    servers: Vec<Server>,
+}
 
-//     let filename = "servers.dat";
-//     let bytes = fs::read(filename).unwrap();
-//     let x: Servers = from_slice(bytes).unwrap();
-//     println!("Here: {:#?}", x);
+fn main() {
+    let filename = "servers.dat";
+    let bytes = fs::read(filename).unwrap();
+    let x: Servers = from_slice(bytes).unwrap();
+    println!("Here: {:#?}", x);
 
+    let mut file = File::create("test2.nbt").unwrap();
+    nbt::ser::to_writer(
+        &mut file,
+        &Servers {
+            servers: vec![Server {
+                ip: "loucaskreger.com".into(),
+                name: "Minecraft Server".into(),
+            }],
+        },
+        None,
+    )
+    .unwrap();
+    // nbt::ser::to_writer(&mut file, &x, None).unwrap();
+}
 //     // let cursor = Cursor::new(encoded_bytes);
 //     // let mut x = read::ZlibDecoder::new(cursor);
 //     // let mut new_bytes = Vec::new();

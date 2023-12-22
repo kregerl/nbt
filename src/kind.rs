@@ -19,7 +19,7 @@ pub enum NBTKind {
 }
 
 impl NBTKind {
-    pub fn header_byte(&self) -> u8 {
+    pub(crate) fn header_byte(&self) -> u8 {
         match self {
             NBTKind::End => 0,
             NBTKind::Byte => 1,
@@ -34,7 +34,6 @@ impl NBTKind {
             NBTKind::Compound => 10,
             NBTKind::IntArray => 11,
             NBTKind::LongArray => 12,
-            _ => unreachable!("Unknown ID value for NBTTag {}.", self),
         }
     }
 }

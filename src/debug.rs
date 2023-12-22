@@ -7,7 +7,7 @@ use std::{
 use byteorder::ReadBytesExt;
 use flate2::bufread::GzDecoder;
 
-use crate::{error::{self, NBTError}, kind::NBTKind};
+use crate::{error::{self, Error}, kind::NBTKind};
 
 #[derive(Debug)]
 enum NBTPayload {
@@ -52,7 +52,7 @@ pub fn dump_nbt(filename: &str) -> error::Result<()> {
             println!("{:#?}", tag.payload);
             Ok(())
         }
-        None => Err(NBTError::ExpectedRootCompound),
+        None => Err(Error::ExpectedRootCompound),
     }
 }
 
@@ -64,7 +64,7 @@ pub fn dump_nbt_from_bytes(bytes: Vec<u8>) -> error::Result<()> {
             println!("{:#?}", tag.payload);
             Ok(())
         }
-        None => Err(NBTError::ExpectedRootCompound),
+        None => Err(Error::ExpectedRootCompound),
     }
 }
 
@@ -89,6 +89,7 @@ impl NBTReader {
             let mut decoder = GzDecoder::new(bytes.as_slice());
             let mut decompressed_bytes = Vec::new();
             decoder.read_to_end(&mut decompressed_bytes)?;
+            println!("{:#x?}", decompressed_bytes);
             Cursor::new(decompressed_bytes)
         } else {
             Cursor::new(bytes)

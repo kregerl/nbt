@@ -1,12 +1,9 @@
+use crate::kind::NBTKind;
+use serde::{de, ser};
 use std::{
     fmt::{self, Display},
     io,
 };
-
-use serde::{de, ser};
-
-use crate::kind::NBTKind;
-
 pub type Result<T> = std::result::Result<T, Error>;
 
 #[derive(Debug)]
@@ -18,6 +15,7 @@ pub enum Error {
     InvalidTagId,
     MismatchedTag(NBTKind, NBTKind),
     ExpectedBooleanByte(i8),
+    Unrepresentable,
 }
 
 impl ser::Error for Error {
