@@ -11,8 +11,9 @@ use serde::{
     },
     Serialize, Serializer,
 };
-use std::io;
+use std::{borrow::Borrow, io};
 
+// TODO: Implement tag specific array serializers (IntArray, LongArray, etc.)
 #[test]
 fn test_write() {
     use crate::debug;
@@ -41,6 +42,15 @@ fn test_write() {
     .unwrap();
 
     debug::dump_nbt("test.nbt").unwrap();
+
+    #[derive(Debug, Serialize)]
+    struct Test {
+        #[serde(serialize_with = "crate::byte_array")]
+        after: Vec<i8>,
+    }
+
+    let file = File::create("output2.nbt").unwrap();
+    to_writer(file, &Test { after: vec![1, 2] }).unwrap();
 }
 
 pub fn to_writer<T, W>(w: W, value: &T) -> error::Result<()>
@@ -60,7 +70,7 @@ where
 {
     let mut result = Vec::new();
     let mut serializer = NBTSerializer {
-        writer: Writer::new(&mut result)
+        writer: Writer::new(&mut result),
     };
     value.serialize(&mut serializer)?;
     Ok(result)
@@ -271,7 +281,7 @@ impl<'a, W: io::Write> SerializeStruct for NBTStructSerializer<'a, W> {
     where
         T: Serialize,
     {
-        value.serialize(NBTSerializerImpl::new(
+        value.serialize(NBTSerializerImpl::with_deferred_header(
             &mut self.writer,
             Some(DelayedHeader::MapKey(key)),
         ))
@@ -285,14 +295,31 @@ impl<'a, W: io::Write> SerializeStruct for NBTStructSerializer<'a, W> {
 
 struct NBTSeqSerializer<'a, W: io::Write> {
     writer: &'a mut Writer<W>,
-    delayed_header: Option<DelayedHeader>,
+    deferred_header: Option<DelayedHeader>,
+    skip_header: bool,
 }
 
 impl<'a, W: io::Write> NBTSeqSerializer<'a, W> {
-    pub fn new(writer: &'a mut Writer<W>, delayed_header: Option<DelayedHeader>) -> Self {
+    pub fn from_writer(writer: &'a mut Writer<W>) -> Self {
+        Self::new(writer, None, false)
+    }
+
+    pub fn with_deferred_header(
+        writer: &'a mut Writer<W>,
+        deferred_header: Option<DelayedHeader>,
+    ) -> Self {
+        Self::new(writer, deferred_header, false)
+    }
+
+    pub fn new(
+        writer: &'a mut Writer<W>,
+        deferred_header: Option<DelayedHeader>,
+        skip_header: bool,
+    ) -> Self {
         Self {
             writer,
-            delayed_header,
+            deferred_header,
+            skip_header,
         }
     }
 
@@ -302,7 +329,8 @@ impl<'a, W: io::Write> NBTSeqSerializer<'a, W> {
     {
         value.serialize(NBTSerializerImpl::new(
             &mut self.writer,
-            self.delayed_header,
+            self.deferred_header,
+            self.skip_header,
         ))
     }
 }
@@ -373,22 +401,39 @@ impl<'a, W: io::Write> SerializeTupleVariant for NBTSeqSerializer<'a, W> {
 
 struct NBTSerializerImpl<'a, W: io::Write> {
     writer: &'a mut Writer<W>,
-    delayed_header: Option<DelayedHeader>,
+    deferred_header: Option<DelayedHeader>,
+    skip_header: bool,
 }
 
 impl<'a, W: io::Write> NBTSerializerImpl<'a, W> {
     pub fn from_writer(writer: &'a mut Writer<W>) -> Self {
+        Self::new(writer, None, false)
+    }
+
+    pub fn with_deferred_header(
+        writer: &'a mut Writer<W>,
+        deferred_header: Option<DelayedHeader>,
+    ) -> Self {
+        Self::new(writer, deferred_header, false)
+    }
+
+    pub fn new(
+        writer: &'a mut Writer<W>,
+        delayed_header: Option<DelayedHeader>,
+        skip_header: bool,
+    ) -> Self {
         Self {
             writer,
-            delayed_header: None,
+            deferred_header: delayed_header,
+            skip_header,
         }
     }
 
-    pub fn new(writer: &'a mut Writer<W>, delayed_header: Option<DelayedHeader>) -> Self {
-        Self {
-            writer,
-            delayed_header,
+    pub fn write(&mut self, kind: NBTKind) -> error::Result<()> {
+        if !self.skip_header {
+            self.writer.write_tag_header(kind, self.deferred_header)?;
         }
+        Ok(())
     }
 }
 
@@ -413,45 +458,47 @@ impl<'a, W: io::Write> Serializer for NBTSerializerImpl<'a, W> {
         self.serialize_i8(v as i8)
     }
 
-    fn serialize_i8(self, v: i8) -> Result<Self::Ok, Self::Error> {
-        self.writer
-            .write_tag_header(NBTKind::Byte, self.delayed_header)?;
+    fn serialize_i8(mut self, v: i8) -> Result<Self::Ok, Self::Error> {
+        self.write(NBTKind::Byte)?;
+        // if self.skip_header {
+        //     self.writer.write_tag_header(NBTKind::Byte, self.deferred_header)?;
+        // }
         self.writer.write_i8(v)
     }
 
     fn serialize_i16(self, v: i16) -> Result<Self::Ok, Self::Error> {
         self.writer
-            .write_tag_header(NBTKind::Short, self.delayed_header)?;
+            .write_tag_header(NBTKind::Short, self.deferred_header)?;
         self.writer.write_i16(v)
     }
 
     fn serialize_i32(self, v: i32) -> Result<Self::Ok, Self::Error> {
         self.writer
-            .write_tag_header(NBTKind::Int, self.delayed_header)?;
+            .write_tag_header(NBTKind::Int, self.deferred_header)?;
         self.writer.write_i32(v)
     }
 
     fn serialize_i64(self, v: i64) -> Result<Self::Ok, Self::Error> {
         self.writer
-            .write_tag_header(NBTKind::List, self.delayed_header)?;
+            .write_tag_header(NBTKind::List, self.deferred_header)?;
         self.writer.write_i64(v)
     }
 
     fn serialize_f32(self, v: f32) -> Result<Self::Ok, Self::Error> {
         self.writer
-            .write_tag_header(NBTKind::Float, self.delayed_header)?;
+            .write_tag_header(NBTKind::Float, self.deferred_header)?;
         self.writer.write_f32(v)
     }
 
     fn serialize_f64(self, v: f64) -> Result<Self::Ok, Self::Error> {
         self.writer
-            .write_tag_header(NBTKind::Double, self.delayed_header)?;
+            .write_tag_header(NBTKind::Double, self.deferred_header)?;
         self.writer.write_f64(v)
     }
 
     fn serialize_str(self, v: &str) -> Result<Self::Ok, Self::Error> {
         self.writer
-            .write_tag_header(NBTKind::String, self.delayed_header)?;
+            .write_tag_header(NBTKind::String, self.deferred_header)?;
         self.writer.write_string(v)
     }
 
@@ -476,7 +523,7 @@ impl<'a, W: io::Write> Serializer for NBTSerializerImpl<'a, W> {
 
     fn serialize_unit_struct(self, _name: &'static str) -> Result<Self::Ok, Self::Error> {
         self.writer
-            .write_tag_header(NBTKind::End, self.delayed_header)
+            .write_tag_header(NBTKind::End, self.deferred_header)
     }
 
     fn serialize_unit_variant(
@@ -522,23 +569,39 @@ impl<'a, W: io::Write> Serializer for NBTSerializerImpl<'a, W> {
 
     fn serialize_tuple(self, len: usize) -> Result<Self::SerializeTuple, Self::Error> {
         self.writer
-            .write_tag_header(NBTKind::List, self.delayed_header)?;
+            .write_tag_header(NBTKind::List, self.deferred_header)?;
         if len == 0 {
             self.writer.write_tag_header(NBTKind::End, None)?;
             self.writer.write_i32(0)?;
-            Ok(NBTSeqSerializer::new(self.writer, None))
+            Ok(NBTSeqSerializer::from_writer(self.writer))
         } else {
             let header = DelayedHeader::List(len);
-            Ok(NBTSeqSerializer::new(self.writer, Some(header)))
+            Ok(NBTSeqSerializer::with_deferred_header(
+                self.writer,
+                Some(header),
+            ))
         }
     }
 
     fn serialize_tuple_struct(
         self,
-        _name: &'static str,
+        name: &'static str,
         len: usize,
     ) -> Result<Self::SerializeTupleStruct, Self::Error> {
-        self.serialize_tuple(len)
+        let kind = match name {
+            BYTE_ARRAY_NAME => NBTKind::ByteArray,
+            INT_ARRAY_NAME => NBTKind::IntArray,
+            LONG_ARRAY_NAME => NBTKind::LongArray,
+            _ => return Err(Error::Unrepresentable),
+        };
+        self.writer.write_tag_header(kind, self.deferred_header)?;
+        if len == 0 {
+            self.writer.write_tag_header(NBTKind::End, None)?;
+            self.writer.write_i32(0)?;
+        } else {
+            self.writer.write_i32(len as i32)?;
+        }
+        Ok(NBTSeqSerializer::new(self.writer, None, true))
     }
 
     fn serialize_tuple_variant(
@@ -561,7 +624,7 @@ impl<'a, W: io::Write> Serializer for NBTSerializerImpl<'a, W> {
         _len: usize,
     ) -> Result<Self::SerializeStruct, Self::Error> {
         self.writer
-            .write_tag_header(NBTKind::Compound, self.delayed_header)?;
+            .write_tag_header(NBTKind::Compound, self.deferred_header)?;
         Ok(NBTStructSerializer::new(self.writer))
     }
 
@@ -574,4 +637,100 @@ impl<'a, W: io::Write> Serializer for NBTSerializerImpl<'a, W> {
     ) -> Result<Self::SerializeStructVariant, Self::Error> {
         Err(Error::Unrepresentable)
     }
+}
+
+const BYTE_ARRAY_NAME: &'static str = "__nbt_byte_array__";
+const INT_ARRAY_NAME: &'static str = "__nbt_int_array__";
+const LONG_ARRAY_NAME: &'static str = "__nbt_long_array__";
+
+fn serialize_array<T, S>(
+    array: T,
+    serializer: S,
+    array_type: &'static str,
+) -> Result<S::Ok, S::Error>
+where
+    T: IntoIterator,
+    <T as IntoIterator>::Item: std::borrow::Borrow<i8>,
+    S: Serializer,
+{
+    let mut iter = array.into_iter();
+    let (length, max_length) = iter.size_hint();
+
+    let error_message =
+        "array serializer can only be used for fixed-length collections.".to_string();
+
+    if max_length.is_none() || length != max_length.unwrap() {
+        return Err(serde::ser::Error::custom(&error_message));
+    }
+
+    let mut se = serializer.serialize_tuple_struct(array_type, length)?;
+    for _ in 0..length {
+        se.serialize_field(
+            iter.next()
+                .ok_or_else(|| serde::ser::Error::custom(&error_message))?
+                .borrow(),
+        )?;
+    }
+
+    if iter.next().is_some() {
+        Err(serde::ser::Error::custom(error_message))
+    } else {
+        se.end()
+    }
+}
+
+macro_rules! serialize_array {
+    ($array: ident, $serializer: ident, $array_type: expr) => {{
+        let mut iter = $array.into_iter();
+        let (length, max_length) = iter.size_hint();
+
+        let error_message =
+            "array serializer can only be used for fixed-length collections.".to_string();
+
+        if max_length.is_none() || length != max_length.unwrap() {
+            return Err(serde::ser::Error::custom(&error_message));
+        }
+
+        let mut se = $serializer.serialize_tuple_struct($array_type, length)?;
+        for _ in 0..length {
+            se.serialize_field(
+                iter.next()
+                    .ok_or_else(|| serde::ser::Error::custom(&error_message))?
+                    .borrow(),
+            )?;
+        }
+
+        if iter.next().is_some() {
+            Err(serde::ser::Error::custom(error_message))
+        } else {
+            se.end()
+        }
+    }};
+}
+
+pub fn byte_array<T, S>(array: T, serializer: S) -> Result<S::Ok, S::Error>
+where
+    T: IntoIterator,
+    <T as IntoIterator>::Item: std::borrow::Borrow<i8>,
+    S: Serializer,
+{
+    serialize_array!(array, serializer, BYTE_ARRAY_NAME)
+}
+
+pub fn int_array<T, S>(array: T, serializer: S) -> Result<S::Ok, S::Error>
+where
+    T: IntoIterator,
+    <T as IntoIterator>::Item: std::borrow::Borrow<i32>,
+    S: Serializer,
+{
+    serialize_array!(array, serializer, INT_ARRAY_NAME)
+}
+
+pub fn long_array<T, S>(array: T, serializer: S) -> Result<S::Ok, S::Error>
+where
+    T: IntoIterator,
+    <T as IntoIterator>::Item: std::borrow::Borrow<i64>,
+    S: Serializer,
+{
+    serialize_array!(array, serializer, LONG_ARRAY_NAME)
 }

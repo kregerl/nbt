@@ -114,6 +114,7 @@ impl<'de, 'a, R: io::Read> serde::de::Deserializer<'de> for &'a mut NBTDeseriali
         let kind = self.parser.parse_kind()?;
         if let NBTKind::Compound = kind {
             let _ = self.parser.parse_string()?;
+            // Effectively a list of named tags. Order is not guaranteed.
             visitor.visit_map(NBTMapDeserializer::new(&mut self.parser))
         } else {
             Err(Error::ExpectedRootCompound)
@@ -129,6 +130,7 @@ impl<'de, 'a, R: io::Read> serde::de::Deserializer<'de> for &'a mut NBTDeseriali
     where
         V: de::Visitor<'de>,
     {
+        // Effectively a list of named tags. Order is not guaranteed.
         self.deserialize_map(visitor)
     }
 }
